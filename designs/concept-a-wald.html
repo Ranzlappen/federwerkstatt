@@ -151,6 +151,9 @@
   /* ============================================================ */
   .nav {
     position: fixed; inset: 0 0 auto 0; z-index: 60;
+    /* A soft scrim gives the header a readable background from the very top,
+       before any scroll; .is-stuck then deepens it to a solid blur. */
+    background: linear-gradient(to bottom, rgba(7,13,11,0.62), rgba(7,13,11,0));
     transition: background-color .5s var(--ease), backdrop-filter .5s var(--ease),
                 border-color .5s var(--ease), box-shadow .5s var(--ease);
     border-bottom: 1px solid transparent;
@@ -189,13 +192,23 @@
     .nav__links a { font-size: 10.5px; letter-spacing: 0.1em; }
     .brand { font-size: 1.2rem; }
   }
+  /* On phones the brand + 4 nav links no longer fit on one row and overflowed
+     the header; collapse the links so the header stays within the viewport. */
+  @media (max-width: 560px) {
+    .nav__links { display: none; }
+    .nav__inner { height: 60px; }
+    .brand { font-size: 1.12rem; }
+  }
 
   /* ============================================================ */
   /* HERO + ATMOSPHÄRE                                             */
   /* ============================================================ */
   .hero {
     position: relative;
-    min-height: 100dvh;
+    /* svh = stable "small viewport" height; it doesn't resize as the mobile
+       URL bar shows/hides, so the hero never jumps the scroll on phones. */
+    min-height: 100vh;
+    min-height: 100svh;
     display: grid; place-items: center;
     text-align: center;
     overflow: hidden;
@@ -245,6 +258,39 @@
   @keyframes drift1 { 0% { transform: translateX(-12vw); } 50% { transform: translateX(14vw); } 100% { transform: translateX(-12vw); } }
   @keyframes drift2 { 0% { transform: translateX(10vw); } 50% { transform: translateX(-14vw); } 100% { transform: translateX(10vw); } }
   @keyframes drift3 { 0%,100% { transform: translateX(0) scale(1); opacity: 0.5; } 50% { transform: translateX(8vw) scale(1.1); opacity: 0.8; } }
+
+  /* Animated mist: wide, soft horizontal fog bands that slowly sway across the
+     scene. Wider than the viewport so the edges never reveal, screen-blended so
+     they read as luminous drifting mist over the trees. */
+  .mist {
+    position: absolute; left: -25%; width: 150%; pointer-events: none;
+    mix-blend-mode: screen; will-change: transform; z-index: 1;
+  }
+  .mist--1 {
+    bottom: 5%; height: 42vh; opacity: 0.62; filter: blur(34px);
+    background: linear-gradient(90deg, transparent 0%, rgba(176,202,192,0.18) 28%,
+                rgba(150,178,168,0.10) 52%, rgba(178,204,194,0.16) 74%, transparent 100%);
+    animation: mistsway 52s ease-in-out infinite alternate;
+  }
+  .mist--2 {
+    bottom: 22%; height: 34vh; opacity: 0.42; filter: blur(46px);
+    background: linear-gradient(90deg, transparent 8%, rgba(160,188,178,0.16) 42%,
+                rgba(150,178,168,0.08) 70%, transparent 96%);
+    animation: mistsway 78s ease-in-out infinite alternate-reverse;
+  }
+  .mist--3 {
+    bottom: 0; height: 26vh; opacity: 0.5; filter: blur(30px);
+    background: linear-gradient(90deg, transparent 0%, rgba(170,196,186,0.14) 36%,
+                rgba(184,208,198,0.20) 60%, transparent 100%);
+    animation: mistsway 64s ease-in-out infinite alternate;
+  }
+  @keyframes mistsway {
+    from { transform: translateX(-8%); }
+    to   { transform: translateX(8%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mist { animation: none !important; }
+  }
 
   /* breathing vignette */
   .vignette {
@@ -533,6 +579,10 @@
       <div class="fog fog--2"></div>
       <div class="fog fog--3"></div>
       <div class="fog fog--4"></div>
+      <!-- slow-drifting mist bands (visible moving fog overlay) -->
+      <div class="mist mist--1"></div>
+      <div class="mist mist--2"></div>
+      <div class="mist mist--3"></div>
 
       <div class="atmo__trees">
         <!-- FAR tier: low, hazy ridge -->
