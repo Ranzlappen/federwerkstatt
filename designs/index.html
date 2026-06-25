@@ -30,8 +30,8 @@
   .hero h1{font-family:"Cormorant";font-weight:700;font-size:clamp(2.6rem,7vw,5rem);line-height:1.02;margin:.3em 0 .25em;letter-spacing:.01em}
   .hero p.lead{max-width:680px;margin:0 auto;color:#cdd3d1;font-size:1.15rem}
   .hero .note{margin-top:22px;color:var(--muted);font-style:italic}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:30px 0 60px}
-  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:22px;padding:30px 0 60px}
+  @media(max-width:540px){.grid{grid-template-columns:1fr}}
   .card{background:linear-gradient(180deg,var(--bg2),#0c0f10);border:1px solid var(--line);border-radius:14px;
     overflow:hidden;display:flex;flex-direction:column;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
   .card:hover{transform:translateY(-4px);border-color:#39413f;box-shadow:0 18px 50px rgba(0,0,0,.5)}
@@ -42,6 +42,8 @@
   .sw-b::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 8% at 50% 52%,rgba(194,32,46,.5),transparent 70%)}
   .sw-c{background:linear-gradient(135deg,#1b1714,#14110f);border-bottom:1px solid var(--brass)}
   .sw-c::after{content:"❦";position:absolute;right:16px;top:10px;color:var(--brass);font-size:1.5rem;opacity:.8}
+  .sw-d{background:linear-gradient(160deg,#fde7ee 0%,#f6d6e4 52%,#fdeede 100%)}
+  .sw-d::after{content:"❀";position:absolute;right:15px;top:8px;color:#e3719a;font-size:1.6rem;opacity:.95}
   .card .body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
   .card h2{font-family:"Cormorant";font-weight:700;font-size:1.7rem;margin:0;display:flex;align-items:baseline;gap:.5ch}
   .card h2 small{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
@@ -54,7 +56,7 @@
     font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
     border:1px solid var(--accent,#7fa99b);color:var(--accent,#7fa99b);padding:10px 16px;border-radius:8px;transition:all .2s}
   .open:hover{background:var(--accent,#7fa99b);color:#0a0c0d}
-  .card.a{--accent:var(--wald)} .card.b{--accent:var(--crimson)} .card.c{--accent:var(--brass)}
+  .card.a{--accent:var(--wald)} .card.b{--accent:var(--crimson)} .card.c{--accent:var(--brass)} .card.d{--accent:#e3719a}
   .mix{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#0e1112,#0b0e0f);padding:28px;margin:0 0 70px}
   .mix h3{font-family:"Cormorant";font-weight:700;font-size:1.8rem;margin:0 0 .4em}
   .mix p{color:#c4cac8;margin:.2em 0}
@@ -70,11 +72,12 @@
   </header>
 
   <section class="hero">
-    <span class="kick">Drei atmosphärische Richtungen</span>
+    <span class="kick">Vier eigenständige Richtungen</span>
     <h1>Entwürfe zur Auswahl</h1>
-    <p class="lead">Drei eigenständige Startseiten im Geist des Psychothrillers – düster, filmisch, hochwertig.
-      Jeder Entwurf ist aus klar benannten <em>Bausteinen</em> aufgebaut, damit sich die schönsten Teile
-      verschiedener Entwürfe später zu einem finalen Design zusammenführen lassen.</p>
+    <p class="lead">Vier eigenständige Startseiten – drei im Geist des Psychothrillers (düster, filmisch,
+      hochwertig) und dazu eine helle, blühende Frühlings-Variante. Jeder Entwurf ist aus klar benannten
+      <em>Bausteinen</em> aufgebaut, damit sich die schönsten Teile verschiedener Entwürfe später zu einem
+      finalen Design zusammenführen lassen.</p>
     <p class="note">Der Name der Autorin bleibt bewusst ungenannt – Marke ist „Federwerkstatt“.</p>
   </section>
 
@@ -119,6 +122,20 @@
           <li>Auftakt (Initiale)</li><li>Neuerscheinung</li><li>Bücher-Raster</li><li>Stimmen</li><li>Newsletter</li><li>Footer</li>
         </ul>
         <a class="open" href="concept-c-studierzimmer.html">Ansehen →</a>
+      </div>
+    </article>
+    <!-- Concept D -->
+    <article class="card d">
+      <div class="swatch sw-d"><span class="label">Konzept D · Blüte</span></div>
+      <div class="body">
+        <h2>Blüte <small>frühling</small></h2>
+        <p class="desc">Eine helle Gegenrichtung: Kirschblüten-Rosa, Elfenbein und frisches Grün,
+          mit sanft fallenden Blütenblättern. Romantisch, luftig, voller Licht.</p>
+        <ul class="els">
+          <li class="sig">Blütenregen</li><li class="sig">Frühlings-Palette</li><li>Navigation</li><li>Hero</li>
+          <li>Neuerscheinung</li><li>Bücher-Raster</li><li>Stimmen</li><li>Newsletter</li><li>Footer</li>
+        </ul>
+        <a class="open" href="concept-d-bluete.html">Ansehen →</a>
       </div>
     </article>
   </section>
