@@ -192,12 +192,38 @@
     .nav__links a { font-size: 10.5px; letter-spacing: 0.1em; }
     .brand { font-size: 1.2rem; }
   }
-  /* On phones the brand + 4 nav links no longer fit on one row and overflowed
-     the header; collapse the links so the header stays within the viewport. */
+  /* Hamburger menu (mobile) — keeps every nav item reachable without overflowing
+     the header on phones. */
+  .nav__toggle {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 42px; height: 42px; padding: 9px; margin: -9px -9px -9px 0;
+    background: none; border: 0; cursor: pointer;
+  }
+  .nav__toggle span {
+    display: block; width: 100%; height: 1.6px; border-radius: 2px;
+    background: var(--c-moon);
+    transition: transform .35s var(--ease), opacity .25s var(--ease);
+  }
+  .nav.is-open .nav__toggle span:nth-child(1) { transform: translateY(6.6px) rotate(45deg); }
+  .nav.is-open .nav__toggle span:nth-child(2) { opacity: 0; }
+  .nav.is-open .nav__toggle span:nth-child(3) { transform: translateY(-6.6px) rotate(-45deg); }
   @media (max-width: 560px) {
-    .nav__links { display: none; }
     .nav__inner { height: 60px; }
     .brand { font-size: 1.12rem; }
+    .nav__toggle { display: flex; }
+    .nav__links {
+      position: absolute; top: 100%; left: 0; right: 0; margin: 0;
+      flex-direction: column; align-items: center; gap: 20px; padding: 26px 0 30px;
+      background: rgba(7,13,11,0.94);
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+      border-bottom: 1px solid var(--c-line);
+      transform: translateY(-12px); opacity: 0; pointer-events: none;
+      transition: opacity .32s var(--ease), transform .32s var(--ease);
+    }
+    .nav.is-open .nav__links { transform: none; opacity: 1; pointer-events: auto; }
+    .nav__links a { font-size: 14px; letter-spacing: 0.14em; }
+    .nav__links a::after { display: none; }
   }
 
   /* ============================================================ */
@@ -270,47 +296,47 @@
   }
   /* thick fog rolling + billowing along the base — clearly visible */
   .mist--ground {
-    bottom: -10%; height: 64vh;
+    bottom: -12%; height: 74vh;
     background:
-      linear-gradient(180deg, transparent 0%, rgba(200,221,213,0.20) 24%,
-        rgba(214,231,224,0.42) 56%, rgba(226,238,232,0.66) 100%),
-      radial-gradient(64% 92% at 22% 100%, rgba(222,236,230,0.58), transparent 66%),
-      radial-gradient(60% 88% at 74% 100%, rgba(202,224,216,0.50), transparent 70%);
-    animation: mistroll1 18s ease-in-out infinite alternate,
-               mistbillow 10s ease-in-out infinite;
+      linear-gradient(180deg, transparent 0%, rgba(206,227,220,0.32) 20%,
+        rgba(221,236,230,0.60) 52%, rgba(233,244,239,0.88) 100%),
+      radial-gradient(68% 96% at 22% 100%, rgba(230,242,237,0.78), transparent 66%),
+      radial-gradient(64% 92% at 74% 100%, rgba(210,230,223,0.66), transparent 70%);
+    animation: mistroll1 13s ease-in-out infinite alternate,
+               mistbillow 9s ease-in-out infinite;
   }
   /* mid-level wisps churning the other way */
   .mist--mid {
-    mix-blend-mode: screen; bottom: 12%; height: 56vh;
+    mix-blend-mode: screen; bottom: 8%; height: 62vh;
     background:
-      radial-gradient(52% 66% at 20% 56%, rgba(208,228,220,0.52), transparent 68%),
-      radial-gradient(46% 56% at 54% 44%, rgba(182,208,198,0.44), transparent 70%),
-      radial-gradient(46% 56% at 88% 62%, rgba(212,232,224,0.42), transparent 72%);
-    animation: mistroll2 13s ease-in-out infinite alternate,
-               mistbillow 8s ease-in-out infinite reverse;
+      radial-gradient(56% 70% at 18% 56%, rgba(216,234,227,0.66), transparent 68%),
+      radial-gradient(50% 60% at 52% 42%, rgba(192,216,207,0.56), transparent 70%),
+      radial-gradient(50% 60% at 88% 62%, rgba(218,238,230,0.54), transparent 72%);
+    animation: mistroll2 9.5s ease-in-out infinite alternate,
+               mistbillow 6.5s ease-in-out infinite reverse;
   }
   /* upper veil thickening the whole lower half */
   .mist--high {
-    mix-blend-mode: screen; bottom: 32%; height: 48vh; filter: blur(6px);
-    background: linear-gradient(90deg, transparent 0%, rgba(198,222,214,0.34) 28%,
-                rgba(170,198,188,0.20) 60%, rgba(204,226,218,0.30) 88%, transparent 100%);
-    animation: mistroll3 22s ease-in-out infinite alternate,
-               mistbillow 12s ease-in-out infinite;
+    mix-blend-mode: screen; bottom: 28%; height: 54vh; filter: blur(6px);
+    background: linear-gradient(90deg, transparent 0%, rgba(208,230,222,0.44) 26%,
+                rgba(180,206,196,0.28) 58%, rgba(212,232,224,0.40) 86%, transparent 100%);
+    animation: mistroll3 17s ease-in-out infinite alternate,
+               mistbillow 11s ease-in-out infinite;
   }
   @keyframes mistroll1 {
-    from { transform: translate3d(-16%, 2%, 0) scaleX(1); }
-    to   { transform: translate3d(16%, -2%, 0) scaleX(1.15); }
+    from { transform: translate3d(-20%, 3%, 0) scaleX(1); }
+    to   { transform: translate3d(20%, -3%, 0) scaleX(1.18); }
   }
   @keyframes mistroll2 {
-    from { transform: translate3d(15%, 1%, 0) scale(1); }
-    to   { transform: translate3d(-19%, -3%, 0) scale(1.14); }
+    from { transform: translate3d(19%, 2%, 0) scale(1); }
+    to   { transform: translate3d(-23%, -4%, 0) scale(1.16); }
   }
   @keyframes mistroll3 {
-    from { transform: translate3d(-13%, 0, 0); }
-    to   { transform: translate3d(13%, 0, 0); }
+    from { transform: translate3d(-17%, 0, 0); }
+    to   { transform: translate3d(17%, 0, 0); }
   }
   @keyframes mistbillow {
-    0%, 100% { opacity: 0.62; }
+    0%, 100% { opacity: 0.74; }
     50%      { opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -580,12 +606,15 @@
     <a class="brand" href="#start" aria-label="Federwerkstatt — Startseite">
       <span class="glyph" aria-hidden="true">&#10086;</span> Federwerkstatt
     </a>
-    <nav class="nav__links" aria-label="Hauptnavigation">
+    <nav class="nav__links" id="nav-links" aria-label="Hauptnavigation">
       <a href="#start">Start</a>
       <a href="#buecher">Bücher</a>
       <a href="#ueber">Über</a>
       <a href="#kontakt">Kontakt</a>
     </nav>
+    <button class="nav__toggle" type="button" aria-label="Menü" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </header>
 
@@ -918,6 +947,21 @@
   }
   onScrollNav();
   window.addEventListener("scroll", onScrollNav, { passive: true });
+
+  /* --- mobile hamburger menu --- */
+  var navToggle = document.querySelector(".nav__toggle");
+  if (navToggle && nav) {
+    navToggle.addEventListener("click", function () {
+      var open = nav.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    nav.querySelectorAll(".nav__links a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        nav.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
 
   /* --- reveal on scroll --- */
   var reveals = document.querySelectorAll(".reveal");
