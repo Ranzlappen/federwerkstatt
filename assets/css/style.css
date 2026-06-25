@@ -191,8 +191,12 @@ main#main-content {
   transition: background-color var(--transition-base), box-shadow var(--transition-base), backdrop-filter var(--transition-base);
 }
 
+/* The header always carries a surface background (legible from the very top,
+   before any scroll). The "solid" state added on scroll by main.js only deepens
+   it with a blur + shadow for a subtle elevation. */
 .site-header--transparent {
-  background: transparent;
+  background: var(--c-surface);
+  box-shadow: 0 1px 0 var(--c-border-light, var(--c-border));
 }
 
 .site-header--solid {
@@ -424,8 +428,10 @@ html[data-header-sticky="off"] .theme-toggle {
   gap: var(--space-sm);
   z-index: 999;
   overflow-y: auto;
+  /* svh (small viewport) keeps the open menu a stable height instead of resizing
+     as the mobile URL bar shows/hides — which otherwise jumps the scroll. */
   min-height: calc(100vh - var(--header-height));
-  min-height: calc(100dvh - var(--header-height));
+  min-height: calc(100svh - var(--header-height));
 }
 .nav-mobile.is-open {
   display: flex;
