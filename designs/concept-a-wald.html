@@ -273,7 +273,7 @@
   .fog {
     position: absolute; border-radius: 50%;
     background: radial-gradient(circle, rgba(138,164,155,0.20) 0%, rgba(138,164,155,0.06) 45%, transparent 70%);
-    filter: blur(40px);
+    filter: blur(20px);
     mix-blend-mode: screen;
     will-change: transform, opacity;
   }
@@ -292,7 +292,7 @@
      upper layers use screen blend for a luminous glow. */
   .mist {
     position: absolute; left: -50%; width: 200%; pointer-events: none;
-    will-change: transform, opacity; z-index: 4; /* in front of the hero text */
+    will-change: transform, opacity; z-index: 6; /* in front of the hero text */
   }
   /* thick fog rolling + billowing along the base — clearly visible */
   .mist--ground {
