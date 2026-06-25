@@ -12,3 +12,5 @@ Gemfile.lock
 *.swp
 *.swo
 *~
+# Large, regenerable design-preview screenshots
+designs/previews/
