@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Federwerkstatt — Entwürfe zur Auswahl</title>
+<style>
+  @font-face{font-family:"Cormorant";src:url('../assets/fonts/cormorant-garamond-latin-700-normal.woff2') format('woff2');font-weight:700;font-display:swap}
+  @font-face{font-family:"Cormorant";src:url('../assets/fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2');font-weight:600;font-display:swap}
+  @font-face{font-family:"EBGaramond";src:url('../assets/fonts/eb-garamond-latin-400-normal.woff2') format('woff2');font-weight:400;font-display:swap}
+  @font-face{font-family:"EBGaramond";src:url('../assets/fonts/eb-garamond-latin-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+  @font-face{font-family:"EBGaramond";src:url('../assets/fonts/eb-garamond-latin-500-normal.woff2') format('woff2');font-weight:500;font-display:swap}
+  :root{
+    --bg:#0a0c0d; --bg2:#101315; --ink:#e9e6e0; --muted:#9aa3a1; --line:#262b2d;
+    --brass:#c9a45c; --crimson:#c2202e; --wald:#7fa99b;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:radial-gradient(120% 90% at 50% -10%,#11161a 0%,var(--bg) 60%);color:var(--ink);
+    font-family:"EBGaramond",Georgia,serif;font-size:18px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  header.top{display:flex;align-items:center;justify-content:space-between;padding:26px 0;border-bottom:1px solid var(--line)}
+  .logo{font-family:"Cormorant";font-weight:700;font-size:1.5rem;letter-spacing:.02em;display:flex;align-items:center;gap:.5ch}
+  .logo .fleuron{color:var(--brass)}
+  .kick{font-family:var(--mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+  .hero{padding:84px 0 40px;text-align:center}
+  .hero h1{font-family:"Cormorant";font-weight:700;font-size:clamp(2.6rem,7vw,5rem);line-height:1.02;margin:.3em 0 .25em;letter-spacing:.01em}
+  .hero p.lead{max-width:680px;margin:0 auto;color:#cdd3d1;font-size:1.15rem}
+  .hero .note{margin-top:22px;color:var(--muted);font-style:italic}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;padding:30px 0 60px}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,var(--bg2),#0c0f10);border:1px solid var(--line);border-radius:14px;
+    overflow:hidden;display:flex;flex-direction:column;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+  .card:hover{transform:translateY(-4px);border-color:#39413f;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+  .swatch{height:118px;position:relative;border-bottom:1px solid var(--line)}
+  .swatch .label{position:absolute;left:16px;bottom:12px;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:#0a0c0d;background:rgba(233,230,224,.86);padding:3px 8px;border-radius:4px}
+  .sw-a{background:radial-gradient(80% 120% at 30% -10%,#21302c,#0a100e),repeating-linear-gradient(100deg,transparent 0 22px,rgba(127,169,155,.07) 22px 23px)}
+  .sw-b{background:radial-gradient(38% 70% at 50% 45%,rgba(236,234,231,.16),transparent 60%),#060507}
+  .sw-b::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 8% at 50% 52%,rgba(194,32,46,.5),transparent 70%)}
+  .sw-c{background:linear-gradient(135deg,#1b1714,#14110f);border-bottom:1px solid var(--brass)}
+  .sw-c::after{content:"❦";position:absolute;right:16px;top:10px;color:var(--brass);font-size:1.5rem;opacity:.8}
+  .card .body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+  .card h2{font-family:"Cormorant";font-weight:700;font-size:1.7rem;margin:0;display:flex;align-items:baseline;gap:.5ch}
+  .card h2 small{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+  .card .desc{color:#c4cac8;font-size:.98rem;margin:0}
+  .els{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .els li{font-family:var(--mono);font-size:.66rem;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);
+    padding:4px 8px;border-radius:999px}
+  .els li.sig{color:#0a0c0d;background:var(--accent,#7fa99b);border-color:transparent;font-weight:600}
+  .open{margin-top:auto;display:inline-flex;align-items:center;gap:.5ch;align-self:flex-start;
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
+    border:1px solid var(--accent,#7fa99b);color:var(--accent,#7fa99b);padding:10px 16px;border-radius:8px;transition:all .2s}
+  .open:hover{background:var(--accent,#7fa99b);color:#0a0c0d}
+  .card.a{--accent:var(--wald)} .card.b{--accent:var(--crimson)} .card.c{--accent:var(--brass)}
+  .mix{border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,#0e1112,#0b0e0f);padding:28px;margin:0 0 70px}
+  .mix h3{font-family:"Cormorant";font-weight:700;font-size:1.8rem;margin:0 0 .4em}
+  .mix p{color:#c4cac8;margin:.2em 0}
+  .mix .hint{color:var(--muted);font-style:italic;font-size:.95rem}
+  footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="logo"><span class="fleuron">❦</span> Federwerkstatt</span>
+    <span class="kick">Entwürfe · intern</span>
+  </header>
+
+  <section class="hero">
+    <span class="kick">Drei atmosphärische Richtungen</span>
+    <h1>Entwürfe zur Auswahl</h1>
+    <p class="lead">Drei eigenständige Startseiten im Geist des Psychothrillers – düster, filmisch, hochwertig.
+      Jeder Entwurf ist aus klar benannten <em>Bausteinen</em> aufgebaut, damit sich die schönsten Teile
+      verschiedener Entwürfe später zu einem finalen Design zusammenführen lassen.</p>
+    <p class="note">Der Name der Autorin bleibt bewusst ungenannt – Marke ist „Federwerkstatt“.</p>
+  </section>
+
+  <section class="grid">
+    <!-- Concept A -->
+    <article class="card a">
+      <div class="swatch sw-a"><span class="label">Konzept A · Wald</span></div>
+      <div class="body">
+        <h2>Wald <small>filmisch</small></h2>
+        <p class="desc">Ein nächtlicher Wald aus geschichteten Silhouetten, driftender Nebel und kaltes Mondlicht.
+          Immersiv, atmosphärisch, mit ruhiger Tiefenwirkung.</p>
+        <ul class="els">
+          <li class="sig">Atmosphäre (Nebel)</li><li>Navigation</li><li>Hero</li><li>Neuerscheinung</li>
+          <li>Bücher-Raster</li><li>Stimmen</li><li>Newsletter</li><li>Footer</li>
+        </ul>
+        <a class="open" href="concept-a-wald.html">Ansehen →</a>
+      </div>
+    </article>
+    <!-- Concept B -->
+    <article class="card b">
+      <div class="swatch sw-b"><span class="label">Konzept B · Näher</span></div>
+      <div class="body">
+        <h2>Näher <small>interaktiv</small></h2>
+        <p class="desc">Schwarz wie die Nacht: ein Lichtkegel folgt dem Cursor und enthüllt den Inhalt.
+          Kinetische Typo, Herzschlag-Linie, ein einziger blutroter Akzent.</p>
+        <ul class="els">
+          <li class="sig">Spotlight</li><li class="sig">Puls</li><li>Navigation</li><li>Hero (kinetisch)</li>
+          <li>Neuerscheinung</li><li>Bücher-Raster</li><li>Stimmen</li><li>Newsletter</li><li>Footer</li>
+        </ul>
+        <a class="open" href="concept-b-naeher.html">Ansehen →</a>
+      </div>
+    </article>
+    <!-- Concept C -->
+    <article class="card c">
+      <div class="swatch sw-c"><span class="label">Konzept C · Studierzimmer</span></div>
+      <div class="body">
+        <h2>Studierzimmer <small>editorial</small></h2>
+        <p class="desc">Edel-düsteres Magazin-Layout: Anthrazit, Oxblut und Messing, feine Linien,
+          Filmkorn, große Initiale. Premium, literarisch, abgründig.</p>
+        <ul class="els">
+          <li class="sig">Editorial-Raster</li><li class="sig">Filmkorn</li><li>Navigation</li><li>Hero (asymmetrisch)</li>
+          <li>Auftakt (Initiale)</li><li>Neuerscheinung</li><li>Bücher-Raster</li><li>Stimmen</li><li>Newsletter</li><li>Footer</li>
+        </ul>
+        <a class="open" href="concept-c-studierzimmer.html">Ansehen →</a>
+      </div>
+    </article>
+  </section>
+
+  <section class="mix">
+    <h3>So funktioniert die Auswahl</h3>
+    <p>Öffne jeden Entwurf und sieh dir die Bausteine an. Du musst dich nicht für einen ganzen Entwurf entscheiden –
+      wähle einzelne Elemente aus verschiedenen Entwürfen aus.</p>
+    <p class="hint">Beispiel: „Hero & Nebel aus <strong>Wald</strong>, das Bücher-Raster aus <strong>Studierzimmer</strong>,
+      der Spotlight-Effekt aus <strong>Näher</strong>.“ Daraus baue ich anschließend ein einziges finales Design.</p>
+  </section>
+
+  <footer>
+    <span>❦ Federwerkstatt — interne Entwurfsgalerie</span>
+    <span>Psychothriller · 2026</span>
+  </footer>
+</div>
+</body>
+</html>

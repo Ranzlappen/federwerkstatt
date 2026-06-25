@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Federwerkstatt — Psychothriller, die dich nicht mehr loslassen</title>
+<meta name="description" content="Federwerkstatt — eine Werkstatt für dunkle, psychologisch feine Thriller. Geschichten, die dich nicht mehr loslassen.">
+
+<style>
+/* ============================================================
+   ELEMENT: Fonts (self-hosted, relative paths)
+   ============================================================ */
+@font-face{
+  font-family:'Cormorant Garamond';
+  src:url('../assets/fonts/cormorant-garamond-latin-700-normal.woff2') format('woff2');
+  font-weight:700; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Cormorant Garamond';
+  src:url('../assets/fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2');
+  font-weight:600; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'EB Garamond';
+  src:url('../assets/fonts/eb-garamond-latin-400-normal.woff2') format('woff2');
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'EB Garamond';
+  src:url('../assets/fonts/eb-garamond-latin-400-italic.woff2') format('woff2');
+  font-weight:400; font-style:italic; font-display:swap;
+}
+@font-face{
+  font-family:'EB Garamond';
+  src:url('../assets/fonts/eb-garamond-latin-500-normal.woff2') format('woff2');
+  font-weight:500; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'EB Garamond';
+  src:url('../assets/fonts/eb-garamond-latin-600-normal.woff2') format('woff2');
+  font-weight:600; font-style:normal; font-display:swap;
+}
+
+/* ============================================================
+   Tokens
+   ============================================================ */
+:root{
+  --c-base:#14110f;
+  --c-base-2:#1b1714;
+  --c-base-3:#221d19;
+  --c-oxblood:#6b2b2b;
+  --c-oxblood-br:#9a3b34;
+  --c-brass:#c9a45c;
+  --c-brass-dim:#8d7038;
+  --c-parch:#e8e1d3;
+  --c-parch-dim:#b4ab99;
+  --c-parch-mute:#7d7568;
+  --f-display:'Cormorant Garamond', Georgia, serif;
+  --f-body:'EB Garamond', Georgia, serif;
+  --f-mono:ui-monospace, Menlo, Consolas, monospace;
+  --rule:1px solid rgba(201,164,92,.32);
+  --maxw:1280px;
+  --gut:clamp(1.25rem,4vw,4rem);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(120% 70% at 75% -5%, rgba(154,59,52,.12), transparent 55%),
+    radial-gradient(90% 60% at 5% 105%, rgba(201,164,92,.07), transparent 60%),
+    var(--c-base);
+  color:var(--c-parch);
+  font-family:var(--f-body);
+  font-size:clamp(1.02rem,.55vw + .9rem,1.18rem);
+  line-height:1.62;
+  letter-spacing:.005em;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+a{color:inherit;text-decoration:none;}
+
+::selection{background:rgba(154,59,52,.55);color:#fff;}
+
+:focus-visible{
+  outline:2px solid var(--c-brass);
+  outline-offset:3px;
+  border-radius:1px;
+}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:var(--gut);}
+
+.kicker{
+  font-family:var(--f-mono);
+  font-size:.66rem;
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  color:var(--c-brass);
+}
+
+.hairline{
+  border:0;height:0;
+  border-top:var(--rule);
+  margin:0;
+}
+
+/* brass ornament divider */
+.ornament{
+  display:flex;align-items:center;gap:1.1rem;
+  color:var(--c-brass);
+  margin:clamp(2.5rem,7vw,5rem) 0;
+}
+.ornament::before,.ornament::after{
+  content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,164,92,.45),transparent);
+}
+.ornament span{font-size:1.2rem;opacity:.85;}
+
+/* ============================================================
+   ELEMENT: Grain — film-grain / noise texture overlay
+   ============================================================ */
+.grain{
+  position:fixed;inset:0;
+  z-index:9000;
+  pointer-events:none;
+  opacity:.045;
+  mix-blend-mode:overlay;
+  background-size:240px 240px;
+}
+@media (prefers-reduced-motion:no-preference){
+  .grain{animation:grain-shift 7s steps(6) infinite;}
+}
+@keyframes grain-shift{
+  0%{transform:translate(0,0);}
+  20%{transform:translate(-3%,2%);}
+  40%{transform:translate(2%,-3%);}
+  60%{transform:translate(-2%,1%);}
+  80%{transform:translate(3%,2%);}
+  100%{transform:translate(0,0);}
+}
+/* vignette atop the grain for that printed-spread depth */
+.vignette{
+  position:fixed;inset:0;z-index:8990;pointer-events:none;
+  background:radial-gradient(130% 110% at 50% 35%,transparent 55%,rgba(0,0,0,.42));
+}
+
+/* ============================================================
+   ELEMENT: Navigation
+   ============================================================ */
+.nav{
+  position:sticky;top:0;z-index:8000;
+  background:rgba(20,17,15,.78);
+  backdrop-filter:blur(10px) saturate(1.1);
+  -webkit-backdrop-filter:blur(10px) saturate(1.1);
+  border-bottom:var(--rule);
+}
+.nav__inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;
+  padding-block:1rem;
+}
+.brand{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:1.5rem;
+  letter-spacing:.02em;
+  display:inline-flex;align-items:baseline;gap:.5rem;
+  white-space:nowrap;
+}
+.brand .mark{color:var(--c-brass);font-size:1.15em;}
+.nav__links{
+  display:flex;align-items:center;gap:clamp(1rem,2.4vw,2.4rem);
+  font-family:var(--f-mono);
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.nav__links a{
+  color:var(--c-parch-dim);
+  position:relative;
+  padding-block:.25rem;
+  transition:color .3s ease;
+}
+.nav__links a::after{
+  content:"";position:absolute;left:0;right:100%;bottom:-2px;height:1px;
+  background:var(--c-brass);transition:right .3s ease;
+}
+.nav__links a:hover,.nav__links a:focus-visible{color:var(--c-parch);}
+.nav__links a:hover::after,.nav__links a:focus-visible::after{right:0;}
+@media (max-width:640px){
+  .nav__links{gap:.95rem;font-size:.6rem;letter-spacing:.12em;}
+  .nav__links .sep{display:none;}
+}
+
+/* ============================================================
+   ELEMENT: Hero — asymmetric magazine cover spread
+   ============================================================ */
+.hero{
+  position:relative;
+  padding-block:clamp(3.5rem,9vw,7.5rem) clamp(2.5rem,7vw,5rem);
+  overflow:hidden;
+}
+.hero__grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);
+  gap:clamp(2rem,5vw,4.5rem);
+  align-items:end;
+}
+.hero__lead .kicker{display:block;margin-bottom:1.4rem;}
+.hero__title{
+  font-family:var(--f-display);
+  font-weight:700;
+  font-size:clamp(3.4rem,12vw,9.5rem);
+  line-height:.92;
+  letter-spacing:-.01em;
+  margin:0;
+  color:var(--c-parch);
+  text-wrap:balance;
+}
+.hero__title .ink{
+  color:var(--c-oxblood-br);
+  -webkit-text-stroke:0;
+}
+.hero__standfirst{
+  font-style:italic;
+  font-size:clamp(1.25rem,2.4vw,1.85rem);
+  color:var(--c-parch-dim);
+  max-width:36ch;
+  margin:1.6rem 0 0;
+  line-height:1.4;
+}
+.hero__cta{
+  display:flex;flex-wrap:wrap;gap:1rem;
+  margin-top:2.4rem;
+}
+
+/* hero side: a tall typeset "spine" / aside */
+.hero__aside{
+  position:relative;
+  border-left:var(--rule);
+  padding-left:clamp(1.25rem,2.5vw,2.2rem);
+}
+.hero__aside .folio{
+  font-family:var(--f-mono);
+  font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--c-parch-mute);
+  display:block;margin-bottom:1.1rem;
+}
+.hero__aside p{
+  font-style:italic;
+  color:var(--c-parch-dim);
+  margin:0 0 1.2rem;
+  font-size:1.05rem;
+}
+.hero__sig{
+  font-family:var(--f-display);font-weight:600;
+  font-size:1.6rem;color:var(--c-brass);
+}
+@media (max-width:860px){
+  .hero__grid{grid-template-columns:1fr;gap:2.4rem;}
+  .hero__aside{border-left:0;border-top:var(--rule);padding-left:0;padding-top:1.6rem;}
+}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:var(--f-mono);
+  font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.95em 1.7em;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:transform .25s ease, background .3s ease, color .3s ease, border-color .3s ease;
+  background:transparent;color:inherit;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn--brass{
+  background:linear-gradient(180deg,var(--c-brass),var(--c-brass-dim));
+  color:#1a140c;
+  font-weight:600;
+  box-shadow:0 8px 24px -10px rgba(201,164,92,.6);
+}
+.btn--brass:hover{box-shadow:0 12px 30px -10px rgba(201,164,92,.8);}
+.btn--ghost{
+  border-color:rgba(201,164,92,.45);
+  color:var(--c-parch);
+}
+.btn--ghost:hover{border-color:var(--c-brass);background:rgba(201,164,92,.08);}
+.btn--ox{
+  border-color:rgba(154,59,52,.55);
+  color:var(--c-parch);
+}
+.btn--ox:hover{background:rgba(154,59,52,.16);border-color:var(--c-oxblood-br);}
+@media (prefers-reduced-motion:reduce){.btn:hover{transform:none;}}
+
+/* ============================================================
+   ELEMENT: Auftakt — drop-cap intro paragraph
+   ============================================================ */
+.auftakt{padding-block:clamp(2rem,5vw,4rem);}
+.auftakt__head{
+  display:flex;align-items:baseline;gap:1rem;margin-bottom:1.8rem;
+}
+.auftakt__head h2{
+  font-family:var(--f-display);font-weight:600;
+  font-size:clamp(1.6rem,3vw,2.4rem);margin:0;color:var(--c-parch);
+}
+.auftakt__body{
+  max-width:62ch;
+  font-size:clamp(1.1rem,1.4vw,1.32rem);
+  line-height:1.72;
+  color:var(--c-parch-dim);
+}
+.auftakt__body::first-letter{
+  font-family:var(--f-display);
+  font-weight:700;
+  float:left;
+  font-size:clamp(4.4rem,9vw,6.6rem);
+  line-height:.74;
+  padding:.06em .14em 0 0;
+  margin-top:.06em;
+  color:var(--c-brass);
+  text-shadow:0 2px 0 rgba(0,0,0,.4);
+}
+.auftakt__body em{color:var(--c-parch);font-style:italic;}
+
+/* ============================================================
+   Generated book "covers" (CSS/SVG, no raster)
+   ============================================================ */
+.cover{
+  position:relative;
+  aspect-ratio:2/3;
+  border-radius:2px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), transparent 18%),
+    linear-gradient(150deg, var(--ox1,#52201f), var(--ox2,#2a1411) 60%, #190d0c);
+  box-shadow:
+    inset 0 0 0 1px rgba(201,164,92,.18),
+    0 18px 40px -22px rgba(0,0,0,.9),
+    -6px 0 14px -10px rgba(0,0,0,.7);
+  overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:clamp(.9rem,1.6vw,1.4rem);
+}
+.cover::before{ /* spine shadow */
+  content:"";position:absolute;left:0;top:0;bottom:0;width:8%;
+  background:linear-gradient(90deg,rgba(0,0,0,.55),transparent);
+}
+.cover::after{ /* brass inner frame */
+  content:"";position:absolute;inset:clamp(.5rem,1.2vw,.8rem);
+  border:1px solid rgba(201,164,92,.35);
+  pointer-events:none;
+}
+.cover__pub{
+  font-family:var(--f-mono);font-size:.58rem;letter-spacing:.26em;
+  text-transform:uppercase;color:rgba(201,164,92,.85);
+  position:relative;z-index:1;
+}
+.cover__title{
+  font-family:var(--f-display);font-weight:700;
+  font-size:clamp(1.3rem,3.6vw,2.1rem);
+  line-height:.98;color:var(--c-parch);
+  position:relative;z-index:1;
+  text-shadow:0 1px 8px rgba(0,0,0,.6);
+}
+.cover__rule{
+  width:42%;height:1px;background:var(--c-brass);
+  margin:.5rem 0;opacity:.7;position:relative;z-index:1;
+}
+.cover__author{
+  font-family:var(--f-mono);font-size:.56rem;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--c-parch-mute);
+  position:relative;z-index:1;
+}
+/* decorative fleuron watermark */
+.cover__glyph{
+  position:absolute;right:-.1em;bottom:-.15em;
+  font-size:clamp(4rem,12vw,7rem);color:rgba(201,164,92,.08);
+  z-index:0;line-height:1;
+}
+
+/* ============================================================
+   ELEMENT: Neuerscheinung — featured release
+   ============================================================ */
+.feature{padding-block:clamp(2rem,5vw,4rem);}
+.feature__grid{
+  display:grid;
+  grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(2rem,5vw,4.5rem);
+  align-items:center;
+}
+.feature__coverwrap{position:relative;max-width:340px;}
+.tag-neu{
+  position:absolute;top:-.8rem;left:-.8rem;z-index:3;
+  background:var(--c-oxblood-br);
+  color:#fff;
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.24em;
+  text-transform:uppercase;
+  padding:.45em .9em;
+  box-shadow:0 6px 18px -8px rgba(154,59,52,.8);
+}
+.feature__meta .kicker{display:block;margin-bottom:1rem;}
+.feature__hook{
+  font-family:var(--f-display);font-weight:600;
+  font-size:clamp(1.7rem,3.4vw,2.7rem);
+  line-height:1.08;margin:0 0 1.2rem;color:var(--c-parch);
+  text-wrap:balance;
+}
+.feature__blurb{color:var(--c-parch-dim);max-width:48ch;margin:0 0 1.5rem;}
+.stars{color:var(--c-brass);letter-spacing:.2em;font-size:1.05rem;margin-bottom:1.5rem;}
+.stars small{
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.18em;
+  color:var(--c-parch-mute);margin-left:.6rem;text-transform:uppercase;
+}
+@media (max-width:860px){
+  .feature__grid{grid-template-columns:1fr;gap:2.6rem;}
+  .feature__coverwrap{max-width:240px;margin-inline:auto;}
+}
+
+/* ============================================================
+   ELEMENT: Bücher-Raster — editorial grid of 4
+   ============================================================ */
+.books{padding-block:clamp(2rem,5vw,4rem);}
+.section-head{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:1rem;flex-wrap:wrap;margin-bottom:2.6rem;
+}
+.section-head h2{
+  font-family:var(--f-display);font-weight:700;
+  font-size:clamp(2rem,4.5vw,3.4rem);margin:0;color:var(--c-parch);
+  line-height:1;
+}
+.section-head .lede{
+  font-style:italic;color:var(--c-parch-mute);max-width:30ch;
+  font-size:.98rem;
+}
+.books__grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:clamp(1.2rem,2.4vw,2.2rem);
+}
+.bookcard{
+  display:flex;flex-direction:column;
+  transition:transform .35s ease;
+}
+.bookcard:hover{transform:translateY(-6px);}
+@media (prefers-reduced-motion:reduce){.bookcard:hover{transform:none;}}
+.bookcard .cover{margin-bottom:1.1rem;}
+.bookcard__folio{
+  font-family:var(--f-mono);font-size:.66rem;letter-spacing:.26em;
+  color:var(--c-brass);margin-bottom:.4rem;
+}
+.bookcard__title{
+  font-family:var(--f-display);font-weight:600;
+  font-size:1.3rem;color:var(--c-parch);margin:0 0 .35rem;line-height:1.1;
+}
+.bookcard__hook{
+  font-style:italic;color:var(--c-parch-dim);font-size:.95rem;line-height:1.45;margin:0;
+}
+@media (max-width:860px){.books__grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:460px){.books__grid{grid-template-columns:1fr;gap:2rem;}}
+
+/* ============================================================
+   ELEMENT: Stimmen — pull-quote module (cycling)
+   ============================================================ */
+.voices{
+  padding-block:clamp(3rem,7vw,5.5rem);
+  text-align:center;
+  position:relative;
+}
+.voices__mark{font-family:var(--f-display);font-size:5rem;color:rgba(201,164,92,.28);line-height:.4;}
+.voices__stage{
+  min-height:9.5rem;
+  display:grid;place-items:center;
+  max-width:42ch;margin-inline:auto;
+}
+.voice{
+  grid-area:1/1;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .7s ease, transform .7s ease;
+  pointer-events:none;
+}
+.voice.is-active{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){
+  .voice{transition:opacity .2s ease;transform:none;}
+}
+.voice blockquote{
+  margin:0;
+  font-family:var(--f-body);font-style:italic;
+  font-size:clamp(1.4rem,3vw,2.1rem);
+  line-height:1.35;color:var(--c-parch);
+}
+.voice cite{
+  display:block;margin-top:1.4rem;
+  font-family:var(--f-mono);font-style:normal;
+  font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--c-brass);
+}
+.voices__dots{
+  display:flex;gap:.6rem;justify-content:center;margin-top:2rem;
+}
+.voices__dots button{
+  width:8px;height:8px;border-radius:50%;padding:0;
+  border:1px solid rgba(201,164,92,.5);background:transparent;cursor:pointer;
+  transition:background .3s ease,transform .3s ease;
+}
+.voices__dots button[aria-current="true"]{background:var(--c-brass);transform:scale(1.25);}
+
+/* ============================================================
+   ELEMENT: Newsletter
+   ============================================================ */
+.news{padding-block:clamp(2.5rem,6vw,4.5rem);}
+.news__card{
+  border:var(--rule);
+  background:
+    linear-gradient(180deg, rgba(154,59,52,.06), transparent),
+    var(--c-base-2);
+  padding:clamp(2rem,5vw,3.6rem);
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:clamp(1.5rem,4vw,3rem);
+  align-items:center;
+}
+.news__card h2{
+  font-family:var(--f-display);font-weight:600;
+  font-size:clamp(1.7rem,3.4vw,2.6rem);margin:0 0 .6rem;color:var(--c-parch);
+  line-height:1.05;text-wrap:balance;
+}
+.news__card p{color:var(--c-parch-dim);margin:0;max-width:40ch;}
+.news__form{display:flex;gap:.7rem;flex-wrap:wrap;}
+.news__form input{
+  flex:1 1 200px;min-width:0;
+  background:var(--c-base);
+  border:1px solid rgba(201,164,92,.3);
+  color:var(--c-parch);
+  font-family:var(--f-body);font-size:1rem;
+  padding:.95em 1.1em;
+  transition:border-color .3s ease;
+}
+.news__form input::placeholder{color:var(--c-parch-mute);}
+.news__form input:focus{outline:none;border-color:var(--c-brass);}
+.news__note{
+  font-family:var(--f-mono);font-size:.6rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--c-parch-mute);margin-top:1rem;
+}
+@media (max-width:760px){.news__card{grid-template-columns:1fr;}}
+
+/* ============================================================
+   ELEMENT: Footer
+   ============================================================ */
+.footer{padding-block:clamp(2.5rem,5vw,4rem) 3.5rem;}
+.footer__top{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:1.5rem;flex-wrap:wrap;margin-bottom:1.6rem;
+}
+.footer .brand{font-size:1.3rem;}
+.footer__links{
+  display:flex;gap:1.6rem;
+  font-family:var(--f-mono);font-size:.66rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--c-parch-dim);
+}
+.footer__links a:hover{color:var(--c-brass);}
+.footer__base{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:1rem;flex-wrap:wrap;
+  font-family:var(--f-mono);font-size:.62rem;letter-spacing:.14em;
+  color:var(--c-parch-mute);
+}
+.footer__fleuron{color:var(--c-brass);font-size:1.1rem;}
+
+/* ============================================================
+   ELEMENT: Concept caption (fixed)
+   ============================================================ */
+.concept-caption{
+  position:fixed;left:max(1rem,env(safe-area-inset-left));bottom:1rem;
+  z-index:8500;
+  font-family:var(--f-mono);font-size:.58rem;letter-spacing:.16em;
+  color:var(--c-parch-mute);
+  background:rgba(20,17,15,.5);
+  padding:.4em .7em;
+  border:1px solid rgba(201,164,92,.18);
+  pointer-events:none;
+  backdrop-filter:blur(4px);
+}
+@media (max-width:640px){.concept-caption{font-size:.52rem;}}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease, transform .9s ease;}
+.reveal.is-in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1!important;transform:none!important;transition:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ELEMENT: Grain -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="grain-noise">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+</svg>
+<div class="grain" aria-hidden="true" style="background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>&quot;);"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- ELEMENT: Navigation -->
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="#start" aria-label="Federwerkstatt — Startseite">
+      <span class="mark" aria-hidden="true">&#10086;</span> Federwerkstatt
+    </a>
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a href="#start">Start</a><span class="sep" aria-hidden="true">·</span>
+      <a href="#buecher">Bücher</a><span class="sep" aria-hidden="true">·</span>
+      <a href="#ueber">Über</a><span class="sep" aria-hidden="true">·</span>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main id="start">
+
+  <!-- ELEMENT: Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="wrap hero__grid">
+      <div class="hero__lead">
+        <span class="kicker">Psychothriller — Federwerkstatt</span>
+        <h1 class="hero__title" id="hero-title">Feder<span class="ink">werkstatt</span></h1>
+        <p class="hero__standfirst">Geschichten, die dich nicht mehr loslassen.</p>
+        <div class="hero__cta">
+          <a class="btn btn--brass" href="#buecher">Bücher entdecken</a>
+          <a class="btn btn--ghost" href="#ueber">Über die Werkstatt</a>
+        </div>
+      </div>
+      <aside class="hero__aside" aria-label="Editorial">
+        <span class="folio">Edition № I · MMXXVI</span>
+        <p>Hier wird das Unheil geschmiedet — Satz für Satz, bis die Angst lesbar wird.</p>
+        <div class="hero__sig" aria-hidden="true">&#10086;</div>
+      </aside>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="hairline"></div>
+
+  <!-- ELEMENT: Auftakt -->
+  <section class="auftakt wrap reveal" aria-labelledby="auftakt-title">
+    <div class="auftakt__head">
+      <span class="kicker">Auftakt</span>
+      <h2 id="auftakt-title">Die Werkstatt</h2>
+    </div>
+    <p class="auftakt__body">
+      Irgendwo zwischen Tinte und Schatten liegt die Federwerkstatt — ein stiller Raum,
+      in dem aus alltäglichen Ängsten <em>messerscharfe Abgründe</em> geschmiedet werden.
+      Hier entstehen Thriller, die sich langsam unter die Haut schreiben: psychologisch
+      fein, präzise gebaut, niemals laut. Es sind die kleinen Risse im Vertrauten, die
+      diese Geschichten so unheimlich machen — denn das wahre Grauen trägt selten eine
+      Maske; meistens sitzt es schon mit am Tisch.
+    </p>
+  </section>
+
+  <div class="wrap"><div class="ornament" aria-hidden="true"><span>&#10086;</span></div></div>
+
+  <!-- ELEMENT: Neuerscheinung -->
+  <section class="feature wrap reveal" id="buecher" aria-labelledby="feature-title">
+    <div class="feature__grid">
+      <div class="feature__coverwrap">
+        <span class="tag-neu">Neu</span>
+        <article class="cover" style="--ox1:#5e231f;--ox2:#2b1310;" aria-label="Buchcover: Aschewald">
+          <span class="cover__pub">Federwerkstatt · MMXXVI</span>
+          <span class="cover__glyph" aria-hidden="true">&#10086;</span>
+          <div>
+            <h3 class="cover__title">Aschen&shy;wald</h3>
+            <div class="cover__rule"></div>
+            <span class="cover__author">Ein Psychothriller</span>
+          </div>
+        </article>
+      </div>
+      <div class="feature__meta">
+        <span class="kicker">Neuerscheinung</span>
+        <h2 class="feature__hook" id="feature-title">Wer eine Woche im Wald bleibt, kehrt als ein anderer zurück.</h2>
+        <p class="feature__blurb">
+          Sechs Fremde. Eine abgelegene Hütte. Und ein Schweigen zwischen den Bäumen, das
+          mit jeder Nacht lauter wird. Was als Selbstfindung beginnt, wird zur Jagd — auf
+          die Wahrheit und auf den, der sie kennt. Ein Kammerspiel aus Misstrauen, das
+          erst auf der letzten Seite das Licht ausmacht.
+        </p>
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733; <small>4,9 / 5 · Lesestimmen</small></div>
+        <a class="btn btn--ox" href="#kontakt">Mehr erfahren</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="ornament" aria-hidden="true"><span>&#10086;</span></div></div>
+
+  <!-- ELEMENT: Bücher-Raster -->
+  <section class="books wrap reveal" aria-labelledby="books-title">
+    <div class="section-head">
+      <h2 id="books-title">Das Werk</h2>
+      <p class="lede">Vier Geschichten, die im Dunkeln zu Hause sind.</p>
+    </div>
+    <div class="books__grid">
+
+      <article class="bookcard">
+        <div class="cover" style="--ox1:#3a1d1c;--ox2:#1c0f0d;" aria-label="Buchcover: Die Stille danach">
+          <span class="cover__pub">Federwerkstatt</span>
+          <span class="cover__glyph" aria-hidden="true">&#10086;</span>
+          <div>
+            <h3 class="cover__title">Die Stille danach</h3>
+            <div class="cover__rule"></div>
+            <span class="cover__author">Thriller</span>
+          </div>
+        </div>
+        <span class="bookcard__folio">01</span>
+        <h3 class="bookcard__title">Die Stille danach</h3>
+        <p class="bookcard__hook">Manche Türen sollte man geschlossen lassen.</p>
+      </article>
+
+      <article class="bookcard">
+        <div class="cover" style="--ox1:#5a2622;--ox2:#241210;" aria-label="Buchcover: Kein Entkommen">
+          <span class="cover__pub">Federwerkstatt</span>
+          <span class="cover__glyph" aria-hidden="true">&#10086;</span>
+          <div>
+            <h3 class="cover__title">Kein Ent&shy;kommen</h3>
+            <div class="cover__rule"></div>
+            <span class="cover__author">Thriller</span>
+          </div>
+        </div>
+        <span class="bookcard__folio">02</span>
+        <h3 class="bookcard__title">Kein Entkommen</h3>
+        <p class="bookcard__hook">Er war schon im Haus, bevor sie es merkte.</p>
+      </article>
+
+      <article class="bookcard">
+        <div class="cover" style="--ox1:#33201f;--ox2:#160d0c;" aria-label="Buchcover: Was du nicht siehst">
+          <span class="cover__pub">Federwerkstatt</span>
+          <span class="cover__glyph" aria-hidden="true">&#10086;</span>
+          <div>
+            <h3 class="cover__title">Was du nicht siehst</h3>
+            <div class="cover__rule"></div>
+            <span class="cover__author">Thriller</span>
+          </div>
+        </div>
+        <span class="bookcard__folio">03</span>
+        <h3 class="bookcard__title">Was du nicht siehst</h3>
+        <p class="bookcard__hook">Im Dunkeln ist niemand allein.</p>
+      </article>
+
+      <article class="bookcard">
+        <div class="cover" style="--ox1:#51231f;--ox2:#1f100e;" aria-label="Buchcover: Hinter Glas">
+          <span class="cover__pub">Federwerkstatt</span>
+          <span class="cover__glyph" aria-hidden="true">&#10086;</span>
+          <div>
+            <h3 class="cover__title">Hinter Glas</h3>
+            <div class="cover__rule"></div>
+            <span class="cover__author">Thriller</span>
+          </div>
+        </div>
+        <span class="bookcard__folio">04</span>
+        <h3 class="bookcard__title">Hinter Glas</h3>
+        <p class="bookcard__hook">Sie beobachtet zurück.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <div class="wrap"><div class="ornament" aria-hidden="true"><span>&#10086;</span></div></div>
+
+  <!-- ELEMENT: Stimmen -->
+  <section class="voices wrap reveal" id="ueber" aria-labelledby="voices-title">
+    <span class="kicker" id="voices-title">Stimmen</span>
+    <div class="voices__mark" aria-hidden="true">&#8220;</div>
+    <div class="voices__stage" aria-live="polite">
+      <figure class="voice is-active">
+        <blockquote>Atemloser Nervenkitzel – Gänsehaut garantiert.</blockquote>
+        <cite>— Lesestimmen</cite>
+      </figure>
+      <figure class="voice">
+        <blockquote>Man liest mit angehaltenem Atem bis zur letzten Seite.</blockquote>
+        <cite>— Krimi-Journal</cite>
+      </figure>
+      <figure class="voice">
+        <blockquote>Psychologisch fein, abgründig, unheimlich nah.</blockquote>
+        <cite>— Nachtlese</cite>
+      </figure>
+    </div>
+    <div class="voices__dots" role="tablist" aria-label="Stimmen auswählen">
+      <button type="button" aria-current="true" aria-label="Stimme 1"></button>
+      <button type="button" aria-current="false" aria-label="Stimme 2"></button>
+      <button type="button" aria-current="false" aria-label="Stimme 3"></button>
+    </div>
+  </section>
+
+  <!-- ELEMENT: Newsletter -->
+  <section class="news wrap reveal" id="kontakt" aria-labelledby="news-title">
+    <div class="news__card">
+      <div>
+        <span class="kicker">Newsletter</span>
+        <h2 id="news-title">Bleib in Kontakt — keine Neuerscheinung verpassen.</h2>
+        <p>Seltene Post aus der Werkstatt: neue Geschichten, Leseproben, dunkle Vorboten. Kein Lärm, kein Spam.</p>
+      </div>
+      <div>
+        <form class="news__form" id="news-form" novalidate>
+          <label for="news-email" class="sr-only" style="position:absolute;left:-9999px;">E-Mail-Adresse</label>
+          <input id="news-email" type="email" placeholder="deine@email.de" autocomplete="email" required>
+          <button class="btn btn--brass" type="submit">Eintragen</button>
+        </form>
+        <p class="news__note" id="news-note">❦ Privatsphäre zuerst · jederzeit abbestellbar</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="wrap"><hr class="hairline"></div>
+
+<!-- ELEMENT: Footer -->
+<footer class="footer wrap" aria-label="Fußzeile">
+  <div class="footer__top">
+    <a class="brand" href="#start"><span class="mark" aria-hidden="true">&#10086;</span> Federwerkstatt</a>
+    <nav class="footer__links" aria-label="Rechtliches">
+      <a href="#impressum">Impressum</a>
+      <a href="#datenschutz">Datenschutz</a>
+    </nav>
+  </div>
+  <hr class="hairline">
+  <div class="footer__base" style="margin-top:1.4rem;">
+    <span>© 2026 Federwerkstatt · Alle Rechte vorbehalten.</span>
+    <span class="footer__fleuron" aria-hidden="true">&#10086;</span>
+  </div>
+</footer>
+
+<!-- ELEMENT: Concept caption -->
+<div class="concept-caption" aria-hidden="true">Konzept C · &#8250;Studierzimmer&#8249;</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Scroll reveal ---- */
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  if (reduce || !('IntersectionObserver' in window)) {
+    reveals.forEach(function(el){ el.classList.add('is-in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); }
+      });
+    }, { threshold:.12, rootMargin:'0px 0px -8% 0px' });
+    reveals.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- Stimmen carousel ---- */
+  var voices = Array.prototype.slice.call(document.querySelectorAll('.voice'));
+  var dots = Array.prototype.slice.call(document.querySelectorAll('.voices__dots button'));
+  var idx = 0, timer = null;
+
+  function show(n){
+    idx = (n + voices.length) % voices.length;
+    voices.forEach(function(v,i){ v.classList.toggle('is-active', i===idx); });
+    dots.forEach(function(d,i){ d.setAttribute('aria-current', i===idx ? 'true':'false'); });
+  }
+  function start(){
+    if (reduce || voices.length < 2) return;
+    stop();
+    timer = setInterval(function(){ show(idx+1); }, 5200);
+  }
+  function stop(){ if (timer){ clearInterval(timer); timer = null; } }
+
+  dots.forEach(function(d,i){
+    d.addEventListener('click', function(){ show(i); start(); });
+  });
+  var stage = document.querySelector('.voices');
+  if (stage){
+    stage.addEventListener('mouseenter', stop);
+    stage.addEventListener('mouseleave', start);
+    stage.addEventListener('focusin', stop);
+    stage.addEventListener('focusout', start);
+  }
+  start();
+
+  /* ---- Newsletter (non-functional) ---- */
+  var form = document.getElementById('news-form');
+  var note = document.getElementById('news-note');
+  if (form){
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var input = document.getElementById('news-email');
+      var ok = input && input.value && /.+@.+\..+/.test(input.value);
+      note.textContent = ok
+        ? '❦ Danke — du bist auf der Liste.'
+        : '❦ Bitte gib eine gültige E-Mail-Adresse ein.';
+      note.style.color = ok ? 'var(--c-brass)' : 'var(--c-oxblood-br)';
+      if (ok && input) input.value = '';
+    });
+  }
+})();
+</script>
+</body>
+</html>
