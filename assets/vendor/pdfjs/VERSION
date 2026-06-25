@@ -1,0 +1,4 @@
+pdfjs-dist 4.10.38
+Vendored from npm (npm pack pdfjs-dist@4) — Apache-2.0.
+To bump: npm pack pdfjs-dist@<v>, copy build/pdf.min.mjs + build/pdf.worker.min.mjs +
+web/pdf_viewer.css + LICENSE here, update this file, and bump CACHE_VERSION in sw.js.

@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Ruby gems (Jekyll + plugins)
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      bundler-minor-patch:
+        update-types: ["minor", "patch"]
+
+  # GitHub Actions used in workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions-minor-patch:
+        update-types: ["minor", "patch"]

@@ -1,0 +1,47 @@
+---
+layout: default
+title: "Schlagwörter"
+description: "Alle Artikel nach Schlagwort geordnet — tauchen Sie tiefer in ein Thema ein."
+permalink: /tags/
+overview_backdrop: true
+# [Status field update] Filtered post loops and counts to only include published posts.
+# Tags with zero published posts are hidden entirely.
+---
+
+<header class="page-header">
+  <h1>Schlagwörter</h1>
+  <p>Artikel nach Schlagwort durchstöbern</p>
+</header>
+
+<div class="page-body page-body--no-sticky">
+  <div class="taxonomy-list">
+    {% assign sorted_tags = site.tags | sort %}
+    {% for tag in sorted_tags %}
+      {% assign pub_count = 0 %}
+      {% for post in tag[1] %}{% if post.status == "published" or post.status == "placeholder" %}{% assign pub_count = pub_count | plus: 1 %}{% endif %}{% endfor %}
+      {% if pub_count > 0 %}
+        <a href="#{{ tag[0] | slugify }}">#{{ tag[0] }} <span class="count">({{ pub_count }})</span></a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% for tag in sorted_tags %}
+    {% assign pub_count = 0 %}
+    {% for post in tag[1] %}{% if post.status == "published" or post.status == "placeholder" %}{% assign pub_count = pub_count | plus: 1 %}{% endif %}{% endfor %}
+    {% if pub_count > 0 %}
+  <section class="taxonomy-section" id="{{ tag[0] | slugify }}">
+    <h2>#{{ tag[0] }}</h2>
+    <div class="taxonomy-posts">
+      {% for post in tag[1] %}
+        {% if post.status == "published" or post.status == "placeholder" %}
+      <a href="{{ post.url | relative_url }}">
+        <span>{{ post.title }}</span>
+        <span class="date">{{ post.date | date: "%b %-d, %Y" }}</span>
+      </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+    {% endif %}
+  {% endfor %}
+</div>

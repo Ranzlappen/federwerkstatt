@@ -1,0 +1,24 @@
+<section class="hero" aria-label="Einleitung">
+  <span class="hero__phi" aria-hidden="true">❦</span>
+  <div class="hero-content">
+    <h1>
+      Geschichten und Gedanken,<br>
+      <span class="accent">Wort für Wort.</span>
+    </h1>
+    <p>{{ site.tagline | default: "Die Werkstatt einer Autorin – Geschichten, Essays und stille Gedanken." }}</p>
+    <nav class="hero-buttons" aria-label="Website durchstöbern">
+      <a href="{{ '/papers/' | relative_url }}" class="hero-cta hero-cta--block">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        Werke
+      </a>
+      <a href="{{ '/articles/' | relative_url }}" class="hero-cta hero-cta--block">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M4 5h16M4 12h16M4 19h10"/>
+        </svg>
+        Artikel
+      </a>
+    </nav>
+  </div>
+</section>

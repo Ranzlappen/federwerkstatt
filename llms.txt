@@ -1,0 +1,38 @@
+---
+layout: null
+# llms.txt (https://llmstxt.org/) — a curated, plain-Markdown map of the site for
+# LLMs and AI search engines (GEO). Liquid-rendered like sitemap.xml/robots.txt so
+# the links and the article list stay in sync with the build. Only published/
+# placeholder posts are listed (same filter as the sitemap and feed).
+---
+# {{ site.title }}
+
+> {{ site.tagline }}
+
+{{ site.description }}
+
+Dies ist die persönliche, datenschutzfreundliche Website (keine Analyse, kein Tracking)
+einer Autorin, gebaut mit Jekyll. Die Inhalte gliedern sich in längere **Artikel**
+(Essays und Gedanken) und veröffentlichte **Werke** (zum Lesen und Herunterladen als
+PDF). Über die folgenden Links lässt sich der Inhalt aufrufen.
+
+## Bereiche
+
+- [Artikel]({{ '/articles/' | absolute_url }}): Essays, Geschichten und kürzere Texte der Autorin.
+- [Werke]({{ '/papers/' | absolute_url }}): Längere, veröffentlichte Werke, als PDF lesbar und herunterladbar.
+- [Kategorien]({{ '/categories/' | absolute_url }}): Alle Texte nach Thema gruppiert.
+- [Über]({{ '/about/' | absolute_url }}): Über die Federwerkstatt und diese Seite.
+
+## Artikel
+{% assign published_posts = site.posts | where: "status", "published" %}
+{% assign placeholder_posts = site.posts | where: "status", "placeholder" %}
+{% assign live_posts = published_posts | concat: placeholder_posts | sort: "date" | reverse %}
+{%- for post in live_posts %}
+- [{{ post.title }}]({{ post.url | absolute_url }}){% if post.description %}: {{ post.description | strip_html | normalize_whitespace }}{% elsif post.excerpt %}: {{ post.excerpt | strip_html | normalize_whitespace | truncate: 160 }}{% endif %}
+{%- endfor %}
+
+## Optional
+
+- [RSS- / Atom-Feed]({{ '/feed.xml' | absolute_url }}): Vollständiger Feed neuer Texte.
+- [Sitemap]({{ '/sitemap.xml' | absolute_url }}): Maschinenlesbarer Index aller indexierbaren URLs.
+- [Datenschutz]({{ '/privacy/' | absolute_url }}): Wie diese Seite mit Daten umgeht (und sie vermeidet).

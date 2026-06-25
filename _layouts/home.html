@@ -1,0 +1,137 @@
+---
+layout: default
+# Landing page is a lean "hub": the hero + buttons, then a short text-only intro
+# section (`.home-intro`) — no article cards are linked here, to keep the first
+# paint fast and the next click cheap. The intro adds H2 headings and indexable
+# prose for SEO/GEO without images, so it doesn't slow first paint. After the page
+# finishes loading we warm the browser cache with every post's hero/cover image
+# (see the preloader below) so the Blog / Projects pages render images near-instantly.
+---
+
+{% include hero.html %}
+
+{% comment %}
+  Short on-brand intro below the hero. Its job is SEO/GEO: it gives the otherwise
+  minimal landing page real heading hierarchy (H2s) and indexable text, and links
+  into the two main sections. Copy is a placeholder draft (tracked for a rewrite) —
+  text only, so the fast first paint is preserved.
+{% endcomment %}
+<section class="home-intro" aria-labelledby="home-intro-title">
+  <p class="home-intro__lead">Geschichten und Essays aus der Werkstatt einer Autorin –
+     über Menschen, Augenblicke und die leisen Gedanken, die zwischen den Zeilen wohnen.</p>
+
+  <h2 id="home-intro-title">Geschichten und Werke</h2>
+  <p>Diese Seite versammelt zweierlei Schreiben: kurze Geschichten und Essays, die einer
+     einzigen Idee folgen, wohin sie auch führt, sowie längere Werke, die sich online lesen
+     oder als PDF herunterladen lassen. Beide spüren dem nach, was uns bewegt – wie wir
+     fühlen, wie wir leben und wie sich die Welt in Worte fassen lässt.</p>
+
+  <h2>Warum Worte bleiben</h2>
+  <p>Erzählen heißt, Erfahrung zu bewahren. Geschichten kehren wieder, weil die Fragen
+     hinter ihnen unsere bleiben – nach Nähe, Erinnerung, Verlust und Sinn. Diese Seiten
+     laden dazu ein, genau hinzusehen und nachzulesen, warum manche Sätze nachklingen.
+     Beginne mit den
+     <a href="{{ '/articles/' | relative_url }}">Artikeln</a> oder stöbere in den
+     <a href="{{ '/papers/' | relative_url }}">Werken</a>.</p>
+</section>
+
+{% comment %}
+  Hero/cover image preload list — every published/placeholder post's `image`
+  (the card cover shown on /articles/ and /projects/) plus its `backdrop` (the
+  parallax hero on the post page). Deduped again in JS. First-party, same-origin
+  images only, so no consent gate is needed.
+{% endcomment %}
+<script>
+  window.__heroPreload = [
+  {%- for post in site.posts -%}
+    {%- if post.status == "published" or post.status == "placeholder" -%}
+      {%- if post.image %}"{{ post.image | relative_url }}",{% endif -%}
+      {%- if post.backdrop and post.backdrop != post.image %}"{{ post.backdrop | relative_url }}",{% endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  ];
+</script>
+<script>
+  // Warm the browser cache with the category/post hero images AFTER the landing
+  // page has loaded, while the browser is idle. The images aren't shown here, so
+  // this is pure prefetch: clicking through to Blog / Projects (or a post) then
+  // paints the covers/backdrops from cache.
+  //
+  // Three rules keep this from ever getting in the visitor's way:
+  //   1. It only starts after `load`, during an idle slice.
+  //   2. It fetches at most 3 images at a time at the lowest priority, so it
+  //      never saturates the connection pool — there's little for a real
+  //      navigation to queue behind, and it doesn't re-trigger the loading bar.
+  //   3. The moment the page is being left (`pagehide`), it stops the queue and
+  //      cancels every in-flight request, handing all bandwidth to the next page.
+  (function () {
+    var imgs = window.__heroPreload || [];
+    if (!imgs.length) return;
+
+    // Respect Data Saver / very slow links — don't burn metered data prefetching
+    // images the visitor may never see.
+    var conn = navigator.connection || navigator.webkitConnection;
+    if (conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''))) return;
+
+    // Dedupe (newest-first order is preserved), then cap to the 20 newest
+    // pictures so a growing archive can't turn this into a heavy prefetch.
+    var seen = Object.create(null);
+    var queue = [];
+    for (var i = 0; i < imgs.length && queue.length < 20; i++) {
+      var src = imgs[i];
+      if (src && !seen[src]) { seen[src] = true; queue.push(src); }
+    }
+    if (!queue.length) return;
+
+    var CONCURRENCY = 3;
+    var stopped = false;
+    var inFlight = [];   // images currently loading, so stop() can cancel them
+    var idx = 0;
+
+    function loadOne() {
+      if (stopped || idx >= queue.length) return;
+      var img = new Image();
+      if ('fetchPriority' in img) img.fetchPriority = 'low'; // deprioritize vs. navigation
+      img.decoding = 'async';
+      img.onload = img.onerror = function () {
+        img.onload = img.onerror = null;
+        var at = inFlight.indexOf(img);
+        if (at !== -1) inFlight.splice(at, 1);
+        loadOne(); // refill the slot only after this one settles — pool of 3
+      };
+      inFlight.push(img);
+      idx++;
+      img.src = queue[idx - 1];
+    }
+
+    function pump() {
+      var slots = CONCURRENCY - inFlight.length;
+      for (var k = 0; k < slots; k++) loadOne();
+    }
+
+    function stop() {
+      if (stopped) return;
+      stopped = true;
+      inFlight.forEach(function (img) {
+        img.onload = img.onerror = null;
+        img.src = ''; // cancel the in-flight image request
+      });
+      inFlight.length = 0;
+    }
+
+    // Cancel as the visitor leaves so a click never waits on prefetch traffic.
+    window.addEventListener('pagehide', stop);
+
+    function start() {
+      if (stopped) return;
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(pump, { timeout: 3000 });
+      } else {
+        setTimeout(pump, 1200);
+      }
+    }
+
+    if (document.readyState === 'complete') start();
+    else window.addEventListener('load', start, { once: true });
+  })();
+</script>

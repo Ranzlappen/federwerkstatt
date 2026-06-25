@@ -1,0 +1,26 @@
+{
+  "$comment": "Brand palette — Marble & Ink. Bronze accent + oxblood on charcoal/marble. Mirrors the CSS custom properties in assets/css/style.css.",
+  "accent": {
+    "bronze": "#c9a45c",
+    "bronze-dim": "#b0863f",
+    "bronze-light-bg": "#8a6a3b",
+    "oxblood": "#6b2b2b",
+    "oxblood-dark-bg": "#b1564f"
+  },
+  "surface": {
+    "dark": {
+      "base": "#16171a",
+      "alt": "#1b1c20",
+      "surface": "#1e2024",
+      "surface-alt": "#25272c",
+      "text": "#ece9e2"
+    },
+    "light": {
+      "base": "#f6f5f2",
+      "alt": "#efede8",
+      "surface": "#fffefb",
+      "surface-alt": "#f1efea",
+      "text": "#1c1d21"
+    }
+  }
+}

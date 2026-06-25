@@ -1,0 +1,28 @@
+# Optional metadata for the works (PDFs) in assets/papers/, keyed by the exact
+# PDF filename. The /papers/ ("Werke") page lists every PDF in that folder
+# automatically — just drop a file in and it appears. Add an entry here only
+# when you want a nicer title, author line, date, or abstract than the bare
+# filename.
+#
+# Fields (all optional): title, authors, date (YYYY-MM-DD — also used as the
+# sitemap <lastmod> and the ScholarlyArticle datePublished), description (used
+# as the visible blurb, the search index, and the JSON-LD abstract — write it
+# in the work's own language), lang (BCP-47 code, e.g. "de" / "en", used as the
+# JSON-LD inLanguage), cover (path to a first-page WebP thumbnail, e.g.
+# /assets/papers/covers/<slug>.webp — shown on the /papers/ cards and the work's
+# landing page, and used as its og:image; without it a document icon is shown.
+# Generate covers with: bash script/gen_paper_covers.sh).
+#
+# Tip: name files like  YYYY-MM-DD-kurztitel.pdf  so they sort newest-first.
+#
+# No works are published yet — the "Werke" page shows its empty state until the
+# first PDF lands in assets/papers/. Example entry (delete this comment and fill
+# in real values once a work is added):
+#
+# "2026-01-01-mein-erstes-werk.pdf":
+#   title: "Mein erstes Werk"
+#   authors: "A. B."
+#   date: 2026-01-01
+#   lang: de
+#   description: >-
+#     Eine kurze Beschreibung des Werks, in der Sprache des Werks geschrieben.

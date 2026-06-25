@@ -1,0 +1,49 @@
+---
+layout: default
+title: "Kategorien"
+description: "Alle Artikel nach Kategorie geordnet — wählen Sie ein Thema und stöbern Sie."
+permalink: /categories/
+overview_backdrop: true
+# [Status field update] Filtered post loops and counts to only include published posts.
+# Categories with zero published posts are hidden entirely.
+---
+
+<header class="page-header">
+  <h1>Kategorien</h1>
+  <p>Artikel nach Thema durchstöbern</p>
+</header>
+
+<div class="page-body page-body--no-sticky">
+  <!-- Category pills -->
+  <div class="taxonomy-list">
+    {% assign sorted_cats = site.categories | sort %}
+    {% for cat in sorted_cats %}
+      {% assign pub_count = 0 %}
+      {% for post in cat[1] %}{% if post.status == "published" or post.status == "placeholder" %}{% assign pub_count = pub_count | plus: 1 %}{% endif %}{% endfor %}
+      {% if pub_count > 0 %}
+        <a href="#{{ cat[0] | slugify }}">{{ cat[0] }} <span class="count">({{ pub_count }})</span></a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Posts by category -->
+  {% for cat in sorted_cats %}
+    {% assign pub_count = 0 %}
+    {% for post in cat[1] %}{% if post.status == "published" or post.status == "placeholder" %}{% assign pub_count = pub_count | plus: 1 %}{% endif %}{% endfor %}
+    {% if pub_count > 0 %}
+  <section class="taxonomy-section" id="{{ cat[0] | slugify }}">
+    <h2>{{ cat[0] }}</h2>
+    <div class="taxonomy-posts">
+      {% for post in cat[1] %}
+        {% if post.status == "published" or post.status == "placeholder" %}
+      <a href="{{ post.url | relative_url }}">
+        <span>{{ post.title }}</span>
+        <span class="date">{{ post.date | date: "%b %-d, %Y" }}</span>
+      </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+    {% endif %}
+  {% endfor %}
+</div>

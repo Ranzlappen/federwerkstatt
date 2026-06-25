@@ -1,0 +1,117 @@
+# ============================================================
+# Site Settings
+#
+# Branding placeholders — set these once and the values flow to every
+# template, the SEO/OG tags, the feed, the sitemap, and the manifest.
+#
+# NOTE: the author's real name is intentionally kept private for now.
+# The public identity is the site name "Federwerkstatt"; the author is
+# shown only as the placeholder initials in `author.name` below. Replace
+# the initials / e-mail when you're ready to reveal the full identity.
+# ============================================================
+title: "Federwerkstatt"
+tagline: "Die Werkstatt einer Autorin – Geschichten, Essays und stille Gedanken."
+# Short tagline used ONLY in the homepage <title> ("Site — tagline_short"), to keep
+# it within Google's ~60-char SERP limit. The full `tagline` above still drives the
+# hero subtitle, the WebSite JSON-LD alternateName, and the meta-description fallback.
+tagline_short: "Geschichten, Essays und Werke einer Autorin"
+description: "Federwerkstatt – die literarische Werkstatt einer Autorin: Geschichten, Essays und veröffentlichte Werke, Wort für Wort."
+url: "https://ranzlappen.github.io"
+lang: "de"          # <html lang> + JSON-LD inLanguage (per-post override: lang in front matter)
+locale: "de_DE"     # og:locale
+
+# Default social-share image: og:image/twitter:image fallback for pages without
+# their own raster `image` (SVG covers are skipped — no platform previews SVG).
+# Replace with a real 1200×630 banner when branding lands.
+social_image: "/icons/icon-512.png"
+
+# Search-engine ownership verification — paste the token (the content="…" value)
+# from Google Search Console / Bing Webmaster Tools between the quotes. While these
+# stay empty no meta tag is emitted (head.html skips blank values); once a token is
+# set the verification <meta> renders. Submitting sitemap.xml there afterwards is the
+# single highest-impact indexing step.
+google_site_verification: ""
+bing_site_verification: ""
+# Served from GitHub Pages under the repository path (no custom domain yet), so the
+# site lives at https://ranzlappen.github.io/federwerkstatt/ and baseurl is the repo
+# path. It MUST match the repo name's exact case — a wrong-case baseurl 404s every
+# CSS/JS asset (= white page). If you later add a custom apex domain, drop a CNAME
+# file, set url to the domain and baseurl back to "".
+baseurl: "/federwerkstatt"
+repository: "Ranzlappen/federwerkstatt"
+
+# Author / identity — name kept private for now (placeholder initials only).
+# Leave social handles blank to hide their footer icons. Leave `email` blank to
+# hide the footer contact link entirely.
+author:
+  name: "A. B."
+  email: ""
+  github: ""
+  twitter: ""
+  linkedin: ""
+  discord: ""
+  reddit: ""
+  youtube: ""
+  steam: ""
+
+# Build
+markdown: kramdown
+kramdown:
+  input: GFM
+  auto_ids: true
+  syntax_highlighter: rouge
+
+permalink: /articles/:year/:month/:day/:title/
+paginate: 9
+paginate_path: "/articles/page:num/"
+
+# Collections & Defaults
+# The `papers` collection gives every PDF in assets/papers/ its own pages: a
+# library-free landing page (/papers/<slug>/) and a themed PDF.js reader
+# (/papers/<slug>/read/). It is repurposed here as the author's published "Werke".
+# Each work has two tiny stub files in _papers/ that carry only the PDF filename +
+# permalink; all human metadata stays single-sourced in _data/papers.yml, looked up
+# by filename. script/sync_papers.rb scaffolds the stubs automatically, so "drop a
+# PDF in assets/papers/ and it appears" still holds.
+collections:
+  papers:
+    output: true
+    permalink: /papers/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      status: "published"
+  - scope:
+      path: "pages"
+      type: "pages"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "papers"
+    values:
+      layout: "paper"
+
+# Exclude from build — keep internal files (docs, scripts, brand palette) out
+# of the published site so crawlers only ever see real content.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - README.md
+  - CLAUDE.md
+  - LICENSE
+  - .gitignore
+  - vendor
+  - script
+  - theme.json
+
+# Plugins (GitHub Pages compatible)
+# SEO meta/OG/JSON-LD is hand-rolled in _includes/head.html — do not add
+# jekyll-seo-tag back, it would duplicate every tag.
+plugins:
+  - jekyll-paginate

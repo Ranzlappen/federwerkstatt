@@ -1,0 +1,190 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6f5f2">
+
+{%- comment -%}
+  SEO is fully hand-rolled (no jekyll-seo-tag), so every tag exists exactly once:
+  one <title> (in _layouts/default.html), one meta description, one canonical,
+  one set of OG/Twitter tags, one JSON-LD block per entity. Duplicate or
+  conflicting tags make crawlers pick unpredictably — don't reintroduce a plugin
+  on top of this.
+
+  Share image: SVG covers are skipped for og:image/twitter:image (no platform
+  renders SVG previews); pages without a usable raster fall back to
+  site.social_image with a small "summary" card instead of a large one.
+{%- endcomment -%}
+{%- comment -%} Paper pages: resolved_title + paper_meta come from _layouts/default.html
+(metadata is single-sourced in _data/papers.yml). Use the abstract as the meta
+description and the pre-generated WebP cover as the share image. {%- endcomment -%}
+{%- assign og_image = nil -%}
+{%- if paper_meta and paper_meta.cover -%}
+  {%- assign og_image = paper_meta.cover -%}
+{%- elsif page.image -%}
+  {%- assign img_ext = page.image | split: "." | last | downcase -%}
+  {%- unless img_ext == "svg" -%}{%- assign og_image = page.image -%}{%- endunless -%}
+{%- endif -%}
+{%- assign og_image_is_fallback = false -%}
+{%- unless og_image -%}
+  {%- assign og_image = site.social_image -%}
+  {%- assign og_image_is_fallback = true -%}
+{%- endunless -%}
+{%- assign meta_title = resolved_title | default: page.title | default: site.title -%}
+{%- if page.url == "/" -%}{%- assign meta_title = site.title -%}{%- endif -%}
+{%- assign meta_description = nil -%}
+{%- if paper_meta -%}{%- assign meta_description = paper_meta.description -%}{%- endif -%}
+{%- assign meta_description = meta_description | default: page.description | default: page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 300 -%}
+
+<meta name="description" content="{{ meta_description | escape }}">
+<meta name="author" content="{{ site.author.name | escape }}">
+{% if page.status == "draft" or page.status == "unpublished" or page.layout == "paper-reader" -%}
+{%- comment -%} The reader shell is a thin app page; the landing page (/papers/<slug>/)
+is the canonical indexable entity for each paper. {%- endcomment -%}
+<meta name="robots" content="noindex, follow">
+{%- else -%}
+<meta name="robots" content="index, follow, max-image-preview:large">
+{%- endif %}
+
+<!-- Canonical -->
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+
+<!-- Open Graph -->
+<meta property="og:site_name" content="{{ site.title | escape }}">
+<meta property="og:locale" content="{{ site.locale | default: 'en_US' }}">
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+<meta property="og:title" content="{{ meta_title | escape }}">
+<meta property="og:description" content="{{ meta_description | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+{% if og_image -%}
+<meta property="og:image" content="{{ og_image | absolute_url }}">
+<meta property="og:image:alt" content="{{ page.image_alt | default: meta_title | escape }}">
+{%- endif %}
+{%- if page.layout == 'post' %}
+<meta property="article:published_time" content="{{ page.date | date_to_xmlschema }}">
+<meta property="article:modified_time" content="{{ page.last_modified_at | default: page.date | date_to_xmlschema }}">
+{% if page.category %}<meta property="article:section" content="{{ page.category | escape }}">{% endif %}
+{%- for tag in page.tags %}
+<meta property="article:tag" content="{{ tag | escape }}">
+{%- endfor %}
+{%- endif %}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="{% if og_image and og_image_is_fallback == false %}summary_large_image{% else %}summary{% endif %}">
+<meta name="twitter:title" content="{{ meta_title | escape }}">
+<meta name="twitter:description" content="{{ meta_description | escape }}">
+{% if og_image %}<meta name="twitter:image" content="{{ og_image | absolute_url }}">{% endif %}
+{% if site.author.twitter and site.author.twitter != "" -%}
+<meta name="twitter:site" content="@{{ site.author.twitter | remove: '@' }}">
+<meta name="twitter:creator" content="@{{ site.author.twitter | remove: '@' }}">
+{%- endif %}
+
+<!-- Search-engine ownership verification (tokens live in _config.yml) -->
+{% if site.google_site_verification and site.google_site_verification != "" %}<meta name="google-site-verification" content="{{ site.google_site_verification }}">{% endif %}
+{% if site.bing_site_verification and site.bing_site_verification != "" %}<meta name="msvalidate.01" content="{{ site.bing_site_verification }}">{% endif %}
+
+<!-- Favicon & Manifest -->
+<link rel="icon" href="{{ '/icons/favicon.ico' | relative_url }}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ '/icons/favicon-32x32.png' | relative_url }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ '/icons/favicon-16x16.png' | relative_url }}">
+<link rel="apple-touch-icon" href="{{ '/icons/apple-touch-icon.png' | relative_url }}">
+<link rel="manifest" href="{{ '/site.webmanifest' | relative_url }}">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{ site.title | escape }}">
+
+<!-- Service worker (installable PWA, offline-capable) -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('{{ '/sw.js' | relative_url }}').catch(function () {});
+    });
+  }
+</script>
+
+<!-- RSS (Atom feed) -->
+<link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | relative_url }}">
+
+<!-- Preconnect to third-party origins (search loads Lunr.js from unpkg) -->
+<link rel="dns-prefetch" href="https://unpkg.com">
+
+<!-- Base URL for JS -->
+<meta name="baseurl" content="{{ site.baseurl }}">
+
+<!-- JSON-LD: WebSite + author Person (site-wide identity for crawlers).
+     Layout-specific entities (BlogPosting, BreadcrumbList, CollectionPage)
+     live in their layouts/pages and reference these via @id. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "{{ '/' | absolute_url }}#website",
+  "name": {{ site.title | jsonify }},
+  "alternateName": {{ site.tagline | jsonify }},
+  "url": "{{ '/' | absolute_url }}",
+  "description": {{ site.description | jsonify }},
+  "inLanguage": {{ site.lang | default: "en" | jsonify }},
+  "author": { "@id": "{{ '/' | absolute_url }}#author" },
+  "publisher": { "@id": "{{ '/' | absolute_url }}#author" }
+}
+</script>
+{%- assign author_profiles = "" | split: "" -%}
+{%- if site.author.github and site.author.github != "" -%}{%- assign u = "https://github.com/" | append: site.author.github -%}{%- assign author_profiles = author_profiles | push: u -%}{%- endif -%}
+{%- if site.author.twitter and site.author.twitter != "" -%}{%- assign h = site.author.twitter | remove: "@" -%}{%- assign u = "https://x.com/" | append: h -%}{%- assign author_profiles = author_profiles | push: u -%}{%- endif -%}
+{%- if site.author.linkedin and site.author.linkedin != "" -%}{%- assign u = "https://www.linkedin.com/in/" | append: site.author.linkedin -%}{%- assign author_profiles = author_profiles | push: u -%}{%- endif -%}
+{%- if site.author.youtube and site.author.youtube != "" -%}{%- assign u = "https://www.youtube.com/@" | append: site.author.youtube -%}{%- assign author_profiles = author_profiles | push: u -%}{%- endif -%}
+{%- if site.author.reddit and site.author.reddit != "" -%}{%- assign u = "https://www.reddit.com/user/" | append: site.author.reddit -%}{%- assign author_profiles = author_profiles | push: u -%}{%- endif %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "{{ '/' | absolute_url }}#author",
+  {% if site.author.email and site.author.email != "" %}"email": "mailto:{{ site.author.email }}",{% endif %}
+  {% if author_profiles.size > 0 %}"sameAs": {{ author_profiles | jsonify }},{% endif %}
+  "name": {{ site.author.name | jsonify }},
+  "url": "{{ '/' | absolute_url }}"
+}
+</script>
+
+<!-- Preload the two critical self-hosted serifs (body + display) -->
+<link rel="preload" href="{{ '/assets/fonts/eb-garamond-latin-400-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ '/assets/fonts/cormorant-garamond-latin-700-normal.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/cookie-consent.css' | relative_url }}">
+{%- comment -%} Reader pages only: the trimmed PDF.js text-layer CSS that positions
+the invisible, selectable text spans over each rendered page. {%- endcomment -%}
+{% if page.layout == 'paper-reader' %}<link rel="stylesheet" href="{{ '/assets/vendor/pdfjs/pdf_viewer.css' | relative_url }}">{% endif %}
+
+<!-- Theme: apply saved preference before paint to prevent flash -->
+<!-- Cookie consent: read saved state before any scripts run -->
+<script>
+  (function() {
+    // Light "gallery" is the default; only an explicit saved "dark" opts out.
+    var t = localStorage.getItem('theme');
+    if (t !== 'dark') document.documentElement.setAttribute('data-theme', 'light');
+    var tc = document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.setAttribute('content', t === 'dark' ? '#16171a' : '#f6f5f2');
+
+    // Header stickiness preference. Default is sticky ("on"); only the explicit
+    // "off" value collapses it, applied before paint so the header doesn't flash
+    // fixed-then-static on load.
+    if (localStorage.getItem('headerSticky') === 'off') {
+      document.documentElement.setAttribute('data-header-sticky', 'off');
+    }
+
+    // Bootstrap consent state synchronously so other scripts can check it
+    var CC_KEY = 'cookie_consent', CC_VER = 1, CC_EXP = 365;
+    try {
+      var d = JSON.parse(localStorage.getItem(CC_KEY));
+      if (d && d.version === CC_VER && (Date.now() - d.timestamp) < CC_EXP * 86400000) {
+        window.__cookieConsent = { functional: !!d.functional, resolved: true };
+        if (d.functional) document.documentElement.classList.add('consent-functional');
+      } else {
+        window.__cookieConsent = { functional: false, resolved: false };
+      }
+    } catch(e) {
+      window.__cookieConsent = { functional: false, resolved: false };
+    }
+  })();
+</script>

@@ -1,0 +1,33 @@
+<article class="post-card">
+  <a href="{{ post.url | relative_url }}" class="post-card__link" aria-label="{{ post.title }}">
+    <div class="post-card__image{% unless post.image %} post-card__image--placeholder{% endunless %}">
+      {% if post.image %}
+        <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" loading="lazy" width="600" height="340" decoding="async">
+      {% else %}
+        <span aria-hidden="true">&#9998;</span>
+      {% endif %}
+    </div>
+    <div class="post-card__body">
+      <div class="post-card__meta">
+        {% if post.category %}
+          <span class="post-card__category">{{ post.category }}</span>
+        {% endif %}
+        {% if post.status != "published" %}
+          <span class="post-card__status">{{ post.status | capitalize }}</span>
+        {% endif %}
+        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %-d, %Y" }}</time>
+      </div>
+      <h3 class="post-card__title">{{ post.title }}</h3>
+      <p class="post-card__excerpt">{{ post.description | default: post.excerpt | strip_html | truncatewords: 25 }}</p>
+      <div class="post-card__footer">
+        {% assign words = post.content | number_of_words %}
+        {% assign minutes = words | divided_by: 200 %}
+        {% if minutes < 1 %}{% assign minutes = 1 %}{% endif %}
+        <span>{{ minutes }} Min. Lesezeit</span>
+        {% if post.tags.size > 0 %}
+          <span>{{ post.tags | first }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </a>
+</article>

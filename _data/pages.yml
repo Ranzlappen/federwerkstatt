@@ -1,0 +1,48 @@
+# ──────────────────────────────────────────────────────────────
+# Unified page registry
+#
+# To add a new page to the site:
+#   1. Drop your HTML/Markdown file into the repo (e.g. pages/foo.html)
+#   2. Add one entry below with title, url, menu, and order
+#
+# menu: where the link appears — [main], [footer], or [main, footer]
+# order: sort position within each menu (lower = first)
+#
+# Changing the "title" here updates the link text everywhere
+# (header, mobile nav, and footer) — single source of truth.
+# ──────────────────────────────────────────────────────────────
+
+- title: "Start"
+  url: "/"
+  menu: [main]
+  order: 1
+
+- title: "Artikel"
+  url: "/articles/"
+  menu: [main]
+  order: 2
+
+- title: "Werke"
+  url: "/papers/"
+  menu: [main]
+  order: 3
+
+- title: "Kategorien"
+  url: "/categories/"
+  menu: [main]
+  order: 4
+
+- title: "Über"
+  url: "/about/"
+  menu: [main, footer]
+  order: 5
+
+- title: "Haftungsausschluss"
+  url: "/disclaimer/"
+  menu: [footer]
+  order: 6
+
+- title: "Datenschutz"
+  url: "/privacy/"
+  menu: [footer]
+  order: 7

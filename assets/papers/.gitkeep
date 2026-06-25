@@ -1,0 +1,2 @@
+# Drop published works (PDFs) here. The /papers/ ("Werke") page lists them
+# automatically; run `ruby script/sync_papers.rb` to scaffold their stubs.

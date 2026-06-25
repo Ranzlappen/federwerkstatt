@@ -1,0 +1,35 @@
+---
+layout: null
+# Local search index for the Ctrl/Cmd+K modal (assets/js/search.js → Lunr).
+# Two kinds of entries, distinguished by "type":
+#   - "post"  : every published/placeholder entry in _posts.
+#   - "paper" : every PDF in assets/papers/, enriched with _data/papers.yml
+#               metadata when present (title/authors/date/description), so
+#               searching by paper title, author, or filename surfaces it.
+# Still fully local — no external crawl.
+---
+[
+  {% assign first = true %}
+  {% for post in site.posts %}{% if post.status == "published" or post.status == "placeholder" %}{% unless first %},{% endunless %}{% assign first = false %}
+  {
+    "type": "post",
+    "title": {{ post.title | jsonify }},
+    "url": "{{ post.url | relative_url }}",
+    "content": {{ post.content | strip_html | normalize_whitespace | truncatewords: 200 | jsonify }},
+    "date": "{{ post.date | date: '%Y-%m-%d' }}",
+    "category": {{ post.category | default: "" | jsonify }},
+    "tags": {{ post.tags | join: " " | jsonify }}
+  }{% endif %}{% endfor %}
+  {% assign papers = site.papers | where_exp: "d", "d.layout != 'paper-reader'" %}
+  {% for doc in papers %}{% assign meta = site.data.papers[doc.pdf] %}{% unless first %},{% endunless %}{% assign first = false %}
+  {
+    "type": "paper",
+    "title": {{ meta.title | default: doc.pdf | remove: ".pdf" | jsonify }},
+    "url": "{{ doc.url | relative_url }}",
+    "content": {{ meta.description | default: "" | append: " " | append: doc.pdf | strip_html | normalize_whitespace | jsonify }},
+    "date": "{% if meta.date %}{{ meta.date | date: '%Y-%m-%d' }}{% endif %}",
+    "category": "Werk",
+    "authors": {{ meta.authors | default: "" | jsonify }},
+    "tags": {{ meta.authors | default: "" | jsonify }}
+  }{% endfor %}
+]

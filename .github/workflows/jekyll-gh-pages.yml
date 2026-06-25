@@ -1,0 +1,92 @@
+name: Build & Deploy (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Read by default; the prepare job below opts up to contents:write just for
+# itself so it can commit papers.yml stubs.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; queue (don't cancel) to avoid half-applied state.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # Scaffold _data/papers.yml stubs for any newly added PDFs and commit them
+  # *before* the build. Doing this inside the deploy run (rather than in a
+  # separate workflow) keeps it to a single deployment per push: the stub lands
+  # on main first, the build picks it up, and only one Pages deployment runs —
+  # no racing a second deployment from a separate commit. The commit is made
+  # with the default GITHUB_TOKEN, so it doesn't re-trigger this workflow.
+  prepare:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Scaffold missing papers.yml entries
+        run: ruby script/sync_papers.rb
+
+      - name: Commit stubs if any were added
+        id: commit
+        run: |
+          if [ -n "$(git status --porcelain _data/papers.yml)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add _data/papers.yml
+            git commit -m "chore(papers): scaffold metadata stubs for new PDFs"
+            git push
+          else
+            echo "No new papers.yml stubs to commit."
+          fi
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          # Build the post-stub commit (falls back to the triggering commit when
+          # no stub was added).
+          ref: ${{ needs.prepare.outputs.sha }}
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
+      - name: Build with Jekyll
+        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        env:
+          JEKYLL_ENV: production
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

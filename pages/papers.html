@@ -1,0 +1,110 @@
+---
+layout: default
+title: "Werke"
+subtitle: Veröffentlichte Werke &amp; Schriften
+description: "Abgeschlossene Werke der Autorin als freie PDF-Downloads — Erzählungen, Essays und längere Texte zum Lesen im Browser oder Herunterladen."
+permalink: /papers/
+overview_backdrop: true
+---
+
+{%- comment -%}
+  Lists the `papers` collection — one card per PDF, linking to its landing page
+  (/papers/<slug>/), which in turn offers the themed reader and the download. All
+  metadata is single-sourced in _data/papers.yml, keyed by the PDF filename; the
+  stub docs in _papers/ only carry the filename + permalink.
+
+  Sort newest-first by the abstract's date without duplicating it into front
+  matter: build "YYYY-MM-DD::url" keys, sort, reverse, then re-resolve each doc.
+{%- endcomment -%}
+{%- assign landing = site.papers | where_exp: "d", "d.layout != 'paper-reader'" -%}
+{%- assign keys = "" | split: "" -%}
+{%- for d in landing -%}
+  {%- assign m = site.data.papers[d.pdf] -%}
+  {%- assign datekey = m.date | default: "0000-00-00" | date: "%Y-%m-%d" -%}
+  {%- capture entry -%}{{ datekey }}::{{ d.url }}{%- endcapture -%}
+  {%- assign keys = keys | push: entry -%}
+{%- endfor -%}
+{%- assign keys = keys | sort | reverse -%}
+
+{% if landing.size > 0 %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": {{ page.title | jsonify }},
+  "url": "{{ page.url | absolute_url }}",
+  "description": {{ page.description | jsonify }},
+  "isPartOf": { "@id": "{{ '/' | absolute_url }}#website" },
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {% for key in keys %}{% assign u = key | split: "::" | last %}{% assign doc = landing | where: "url", u | first %}{% assign meta = site.data.papers[doc.pdf] %}
+      {
+        "@type": "ListItem",
+        "position": {{ forloop.index }},
+        "item": {
+          "@type": "ScholarlyArticle",
+          "headline": {{ meta.title | default: doc.pdf | jsonify }},
+          {% if meta.description %}"abstract": {{ meta.description | jsonify }},{% endif %}
+          {% if meta.date %}"datePublished": "{{ meta.date | date: '%Y-%m-%d' }}",{% endif %}
+          {% if meta.lang %}"inLanguage": {{ meta.lang | jsonify }},{% endif %}
+          "author": { "@type": "Person", "name": {{ meta.authors | default: site.author.name | jsonify }} },
+          "url": "{{ doc.url | absolute_url }}"
+        }
+      }{% unless forloop.last %},{% endunless %}{% endfor %}
+    ]
+  }
+}
+</script>
+{% endif %}
+
+<header class="page-header">
+  <h1>{{ page.title }}</h1>
+  {% if page.subtitle %}<p>{{ page.subtitle }}</p>{% endif %}
+</header>
+
+<div class="page-body page-body--no-sticky">
+  {% if landing.size > 0 %}
+  <ul class="papers-list">
+    {% for key in keys %}
+      {% assign u = key | split: "::" | last %}
+      {% assign file = landing | where: "url", u | first %}
+      {% assign meta = site.data.papers[file.pdf] %}
+      {% assign pdf_path = "/assets/papers/" | append: file.pdf %}
+      <li class="paper-card">
+        <a class="paper-card__cover" href="{{ file.url | relative_url }}" aria-hidden="true" tabindex="-1">
+          {% if meta.cover %}
+            <img src="{{ meta.cover | relative_url }}" alt="" width="120" height="170" loading="lazy">
+          {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/>
+            </svg>
+          {% endif %}
+        </a>
+        <div class="paper-card__body">
+          <h2 class="paper-card__title">
+            <a href="{{ file.url | relative_url }}">{{ meta.title | default: file.pdf | remove: ".pdf" }}</a>
+          </h2>
+          <div class="paper-card__meta">
+            {% if meta.authors %}<span>{{ meta.authors }}</span>{% endif %}
+            {% if meta.date %}<span>{{ meta.date | date: "%B %-d, %Y" }}</span>{% endif %}
+          </div>
+          {% if meta.description %}<p class="paper-card__desc">{{ meta.description }}</p>{% endif %}
+          <div class="paper-card__links">
+            <a class="paper-card__read" href="{{ file.url | relative_url }}">Online lesen &rarr;</a>
+          </div>
+        </div>
+        <a class="paper-card__download" href="{{ pdf_path | uri_escape | relative_url }}" download aria-label="{{ meta.title | default: file.pdf | escape }} herunterladen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          <span>PDF</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="papers-empty">Noch keine Werke veröffentlicht — schauen Sie bald wieder vorbei.</p>
+  {% endif %}
+</div>
