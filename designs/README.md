@@ -1,11 +1,12 @@
 # Federwerkstatt — Entwurfsgalerie (design showcase)
 
-Three self-contained, atmospheric **psychological-thriller** landing-page concepts to
-choose from. They are **showcase mockups**, not wired into the live site — open them
-directly in a browser. Branding is **Federwerkstatt**; the author's real name appears
-nowhere (placeholder book titles + invented review blurbs are used).
+Four self-contained landing-page concepts to choose from — three atmospheric
+**psychological-thriller** directions plus one bright **spring / blossom** counterpoint.
+They are **showcase mockups**, not wired into the live site — open them directly in a
+browser. Branding is **Federwerkstatt**; the author's real name appears nowhere
+(placeholder book titles + invented review blurbs are used).
 
-Open **`index.html`** for the gallery (links all three + the element legend).
+Open **`index.html`** for the gallery (links all four + the element legend).
 
 ## Concepts
 
@@ -14,6 +15,7 @@ Open **`index.html`** for the gallery (links all three + the element legend).
 | `concept-a-wald.html` | **Wald** | Cinematic night-forest hero | Drifting fog + parallax pine silhouettes + moonlight |
 | `concept-b-naeher.html` | **Näher** | Interactive, kinetic, crimson | Cursor **spotlight** reveal + heartbeat **Puls** line |
 | `concept-c-studierzimmer.html` | **Studierzimmer** | Premium dark-editorial noir | Asymmetric **editorial grid** + brass + **film-grain** |
+| `concept-d-bluete.html` | **Blüte** | Bright spring / blossom | Falling **petals** (Blütenregen) + blooming palette |
 
 ## Mix-and-match
 
