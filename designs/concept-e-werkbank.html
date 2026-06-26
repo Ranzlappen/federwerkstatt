@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Federwerkstatt — Geschichten, die dich nicht mehr loslassen</title>
+<meta name="description" content="Federwerkstatt — Konzept E ›Werkbank‹. Eine warme, mechanische Werkstatt aus Holz, Leder und Messing.">
+<meta name="theme-color" content="#241910">
+<style>
+  /* ============================================================ */
+  /* FONTS — self-hosted, paths relative to /designs/             */
+  /* ============================================================ */
+  @font-face {
+    font-family: "EB Garamond";
+    src: url('../assets/fonts/eb-garamond-latin-400-normal.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "EB Garamond";
+    src: url('../assets/fonts/eb-garamond-latin-400-italic.woff2') format('woff2');
+    font-weight: 400; font-style: italic; font-display: swap;
+  }
+  @font-face {
+    font-family: "EB Garamond";
+    src: url('../assets/fonts/eb-garamond-latin-500-normal.woff2') format('woff2');
+    font-weight: 500; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "EB Garamond";
+    src: url('../assets/fonts/eb-garamond-latin-600-normal.woff2') format('woff2');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "Cormorant Garamond";
+    src: url('../assets/fonts/cormorant-garamond-latin-600-normal.woff2') format('woff2');
+    font-weight: 600; font-style: normal; font-display: swap;
+  }
+  @font-face {
+    font-family: "Cormorant Garamond";
+    src: url('../assets/fonts/cormorant-garamond-latin-700-normal.woff2') format('woff2');
+    font-weight: 700; font-style: normal; font-display: swap;
+  }
+
+  /* ============================================================ */
+  /* TOKENS — warm walnut · leather · brass · lamplight           */
+  /* ============================================================ */
+  :root {
+    --c-wood-0:   #1b120a;
+    --c-wood-1:   #241910;
+    --c-wood-2:   #302114;
+    --c-wood-3:   #3d2a18;
+    --c-leather:  #7c5230;
+    --c-leather-hi:#9a6a3c;
+    --c-brass:    #caa45c;
+    --c-brass-hi: #e3c684;
+    --c-brass-lo: #9a7634;
+    --c-lamp:     #f4c878;
+    --c-text:     #efe3cf;
+    --c-text-dim: #cbb89c;
+    --c-line:     rgba(202,164,92,0.18);
+    --c-line-hi:  rgba(202,164,92,0.34);
+
+    --f-body:    "EB Garamond", Georgia, serif;
+    --f-display: "Cormorant Garamond", Georgia, serif;
+    --f-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+    --shadow-card: 0 22px 56px -20px rgba(0,0,0,0.78);
+    --shadow-deep: 0 30px 80px -28px rgba(0,0,0,0.85);
+    --ease: cubic-bezier(.22,.61,.36,1);
+    --maxw: 1180px;
+    --header-h: 64px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background: var(--c-wood-1);
+    color: var(--c-text);
+    font-family: var(--f-body);
+    font-size: 18px;
+    line-height: 1.66;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Static wood-grain / paper texture overlay (NOT animated) */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+  }
+
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--c-brass-hi);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 26px; }
+
+  .kicker {
+    font-family: var(--f-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--c-brass);
+  }
+
+  .section { position: relative; z-index: 2; padding: clamp(72px, 11vw, 132px) 0; }
+  .section__head { max-width: 720px; margin: 0 0 clamp(34px, 5vw, 56px); }
+  .section__title {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5.2vw, 3.4rem);
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    margin: 0.5rem 0 0;
+    color: var(--c-text);
+  }
+  .section__lead { color: var(--c-text-dim); font-size: 1.12rem; margin: 0.9rem 0 0; }
+
+  /* ============================================================ */
+  /* HEADER / NAV                                                  */
+  /* ============================================================ */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 60;
+    display: flex; align-items: center; justify-content: space-between;
+    height: var(--header-h);
+    padding: 0 22px;
+    /* warm translucent from the very top */
+    background: linear-gradient(180deg, rgba(36,25,16,0.92), rgba(36,25,16,0.74));
+    border-bottom: 1px solid var(--c-line);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: background .4s var(--ease), box-shadow .4s var(--ease);
+  }
+  .nav.is-stuck {
+    background: linear-gradient(180deg, rgba(27,18,10,0.97), rgba(36,25,16,0.9));
+    box-shadow: 0 14px 34px -22px rgba(0,0,0,0.9);
+  }
+  .nav__brand {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 1.34rem;
+    letter-spacing: 0.02em;
+    color: var(--c-text);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav__brand .fleuron { color: var(--c-brass); }
+  .nav__links {
+    display: flex; align-items: center; gap: 30px;
+    font-family: var(--f-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .nav__links a { color: var(--c-text-dim); transition: color .25s var(--ease); position: relative; }
+  .nav__links a::after {
+    content: ""; position: absolute; left: 0; right: 100%; bottom: -6px;
+    height: 1px; background: var(--c-brass);
+    transition: right .3s var(--ease);
+  }
+  .nav__links a:hover { color: var(--c-brass-hi); }
+  .nav__links a:hover::after { right: 0; }
+
+  .nav__toggle {
+    display: none;
+    width: 42px; height: 42px;
+    border: 1px solid var(--c-line-hi);
+    border-radius: 9px;
+    background: rgba(124,82,48,0.18);
+    cursor: pointer;
+    position: relative;
+  }
+  .nav__toggle span,
+  .nav__toggle span::before,
+  .nav__toggle span::after {
+    content: ""; position: absolute;
+    left: 50%; width: 20px; height: 2px;
+    background: var(--c-brass-hi); border-radius: 2px;
+    transform: translateX(-50%);
+    transition: transform .3s var(--ease), opacity .2s var(--ease);
+  }
+  .nav__toggle span { top: 50%; margin-top: -1px; }
+  .nav__toggle span::before { top: -7px; }
+  .nav__toggle span::after { top: 7px; }
+  .nav.is-open .nav__toggle span { background: transparent; }
+  .nav.is-open .nav__toggle span::before { transform: translateX(-50%) translateY(7px) rotate(45deg); }
+  .nav.is-open .nav__toggle span::after  { transform: translateX(-50%) translateY(-7px) rotate(-45deg); }
+
+  /* ============================================================ */
+  /* HERO                                                          */
+  /* ============================================================ */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex; align-items: center;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 80% at 50% -10%, rgba(244,200,120,0.16), transparent 55%),
+      linear-gradient(180deg, var(--c-wood-2), var(--c-wood-0) 92%);
+    isolation: isolate;
+  }
+
+  /* --- Parallax-Werkbank layers --- */
+  .parallax { position: absolute; inset: -8% 0 0; z-index: 1; pointer-events: none; }
+  .player {
+    position: absolute; left: 50%; top: 0;
+    width: min(1320px, 132vw);
+    transform: translateX(-50%);
+    will-change: transform;
+  }
+  .player svg { width: 100%; height: auto; }
+
+  /* lamp glow — gentle pulse, opacity only */
+  .lamp-glow {
+    position: absolute;
+    left: 50%; top: 4%;
+    width: min(680px, 92vw); height: min(680px, 92vw);
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(244,200,120,0.42), rgba(244,200,120,0.10) 42%, transparent 66%);
+    z-index: 1; pointer-events: none;
+    will-change: opacity;
+    animation: lampPulse 6.5s ease-in-out infinite;
+  }
+  @keyframes lampPulse {
+    0%, 100% { opacity: 0.78; }
+    50%      { opacity: 1; }
+  }
+
+  /* vignette frame */
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: radial-gradient(120% 100% at 50% 40%, transparent 52%, rgba(0,0,0,0.5) 100%);
+  }
+
+  /* --- Zahnräder (gears) layer --- */
+  .gears { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  .gear { position: absolute; transform-origin: 50% 50%; will-change: transform; color: var(--c-brass); }
+  .gear svg { width: 100%; height: auto; }
+  .gear--g1 { top: 9%;  right: 7%;  width: clamp(120px, 18vw, 230px); color: var(--c-brass); }
+  .gear--g2 { top: 23%; right: 19%; width: clamp(74px, 11vw, 138px);  color: var(--c-brass-lo); }
+  .gear--g3 { bottom: 13%; left: 6%; width: clamp(96px, 15vw, 196px);  color: var(--c-brass-hi); }
+  .gear--g4 { bottom: 26%; left: 17%; width: clamp(58px, 9vw, 110px);  color: var(--c-brass-lo); }
+  .gear--g5 { top: 40%; right: 3%; width: clamp(50px, 7vw, 90px);     color: var(--c-brass); opacity: 0.85; }
+  .gear--g6 { top: 6%;  left: 4%;  width: clamp(60px, 9vw, 116px);    color: var(--c-brass-lo); opacity: 0.9; }
+
+  @keyframes spinCW  { to { transform: rotate(360deg); } }
+  @keyframes spinCCW { to { transform: rotate(-360deg); } }
+  .gear--g2 { animation: spinCW  18s linear infinite; }
+  .gear--g3 { animation: spinCCW 26s linear infinite; }
+  .gear--g4 { animation: spinCW  14s linear infinite; }
+  .gear--g5 { animation: spinCCW 10s linear infinite; }
+  .gear--g6 { animation: spinCW  30s linear infinite; }
+  /* g1 is the large SCROLL-DRIVEN gear (set via JS); CSS keeps it idle */
+
+  .hero__inner { position: relative; z-index: 5; width: 100%; }
+  .hero__content { max-width: 760px; }
+  .hero__kicker { display: inline-block; margin-bottom: 1.4rem; }
+  .hero__title {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 11vw, 7.6rem);
+    line-height: 0.94;
+    letter-spacing: 0.005em;
+    margin: 0;
+    max-width: 100%;
+    color: var(--c-text);
+    text-shadow: 0 2px 0 rgba(0,0,0,0.35), 0 22px 60px rgba(0,0,0,0.5);
+  }
+  .hero__tagline {
+    font-family: var(--f-body);
+    font-style: italic;
+    font-size: clamp(1.15rem, 2.6vw, 1.7rem);
+    color: var(--c-text-dim);
+    margin: 1.5rem 0 0;
+    max-width: 30ch;
+  }
+  .hero__cta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 2.4rem; }
+
+  .btn {
+    font-family: var(--f-mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.95em 1.7em;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform .25s var(--ease), box-shadow .3s var(--ease), background .3s var(--ease), color .3s var(--ease);
+    display: inline-flex; align-items: center; gap: 0.6em;
+  }
+  .btn--brass {
+    background: linear-gradient(180deg, var(--c-brass-hi), var(--c-brass-lo));
+    color: #2a1c0c;
+    box-shadow: 0 14px 30px -12px rgba(202,164,92,0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    font-weight: 600;
+  }
+  .btn--brass:hover { transform: translateY(-2px); box-shadow: 0 20px 40px -12px rgba(227,198,132,0.65), inset 0 1px 0 rgba(255,255,255,0.5); }
+  .btn--ghost {
+    background: rgba(124,82,48,0.18);
+    border-color: var(--c-line-hi);
+    color: var(--c-text);
+  }
+  .btn--ghost:hover { transform: translateY(-2px); background: rgba(124,82,48,0.32); border-color: var(--c-brass); color: var(--c-brass-hi); }
+
+  .scroll-hint {
+    position: absolute; left: 50%; bottom: 22px; z-index: 5;
+    transform: translateX(-50%);
+    font-family: var(--f-mono);
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--c-text-dim);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-hint .chev {
+    width: 10px; height: 10px;
+    border-right: 1.5px solid var(--c-brass); border-bottom: 1.5px solid var(--c-brass);
+    transform: rotate(45deg);
+    animation: bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{ transform: rotate(45deg) translate(0,0); } 50%{ transform: rotate(45deg) translate(3px,3px); } }
+
+  /* ============================================================ */
+  /* REVEAL — scroll-into-view                                    */
+  /* ============================================================ */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 34px, 0);
+    transition: opacity .8s var(--ease), transform .8s var(--ease);
+    transition-delay: var(--d, 0ms);
+    will-change: transform, opacity;
+  }
+  .reveal--left  { transform: translate3d(-44px, 0, 0); }
+  .reveal--right { transform: translate3d(44px, 0, 0); }
+  .reveal--scale { transform: scale(0.94); }
+  .reveal.is-in { opacity: 1; transform: none; }
+
+  /* ============================================================ */
+  /* NEUERSCHEINUNG                                                */
+  /* ============================================================ */
+  .feature { background: linear-gradient(180deg, var(--c-wood-1), var(--c-wood-2)); }
+  .feature__grid {
+    display: grid; grid-template-columns: 0.85fr 1.15fr; gap: clamp(30px, 5vw, 64px);
+    align-items: center;
+  }
+  .cover {
+    position: relative;
+    aspect-ratio: 5 / 7;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--shadow-deep);
+    border: 1px solid var(--c-line-hi);
+  }
+  .cover svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .feature__body .tag {
+    display: inline-block;
+    font-family: var(--f-mono); font-size: 0.66rem; letter-spacing: 0.26em;
+    text-transform: uppercase; color: #2a1c0c;
+    background: linear-gradient(180deg, var(--c-brass-hi), var(--c-brass-lo));
+    padding: 0.35em 0.9em; border-radius: 999px; font-weight: 600;
+    box-shadow: 0 8px 18px -8px rgba(202,164,92,0.6);
+  }
+  .feature__title {
+    font-family: var(--f-display); font-weight: 700;
+    font-size: clamp(2.2rem, 5.5vw, 3.8rem); line-height: 1.0;
+    margin: 1rem 0 0; color: var(--c-text);
+  }
+  .feature__hook { font-style: italic; font-size: 1.3rem; color: var(--c-brass-hi); margin: 0.9rem 0 0; }
+  .feature__blurb { color: var(--c-text-dim); margin: 1.1rem 0 1.8rem; max-width: 52ch; }
+
+  /* ============================================================ */
+  /* BÜCHER-RASTER                                                 */
+  /* ============================================================ */
+  .books { background: var(--c-wood-0); }
+  .books__grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  .book {
+    background: linear-gradient(180deg, var(--c-wood-2), var(--c-wood-1));
+    border: 1px solid var(--c-line);
+    border-radius: 12px;
+    padding: 16px;
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+  }
+  .book:hover {
+    transform: translateY(-8px);
+    border-color: var(--c-brass);
+    box-shadow: 0 26px 54px -22px rgba(0,0,0,0.7), 0 0 30px -6px rgba(227,198,132,0.32);
+  }
+  .book .cover { box-shadow: var(--shadow-card); margin-bottom: 14px; }
+  .book__title { font-family: var(--f-display); font-weight: 600; font-size: 1.4rem; margin: 0; color: var(--c-text); }
+  .book__hook  { font-style: italic; color: var(--c-text-dim); font-size: 0.98rem; margin: 0.35rem 0 0; }
+
+  /* ============================================================ */
+  /* STIMMEN                                                       */
+  /* ============================================================ */
+  .voices { background: linear-gradient(180deg, var(--c-wood-1), var(--c-wood-2)); }
+  .voices__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .voice {
+    background: rgba(124,82,48,0.12);
+    border: 1px solid var(--c-line);
+    border-left: 3px solid var(--c-brass);
+    border-radius: 10px;
+    padding: 28px 26px;
+  }
+  .voice__quote { font-style: italic; font-size: 1.22rem; line-height: 1.5; color: var(--c-text); margin: 0; }
+  .voice__src { display: block; margin-top: 1rem; font-family: var(--f-mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--c-brass); }
+
+  /* ============================================================ */
+  /* NEWSLETTER                                                    */
+  /* ============================================================ */
+  .newsletter { background: var(--c-wood-0); text-align: center; }
+  .newsletter__card {
+    max-width: 660px; margin: 0 auto;
+    background: linear-gradient(180deg, var(--c-wood-2), var(--c-wood-1));
+    border: 1px solid var(--c-line-hi);
+    border-radius: 16px;
+    padding: clamp(36px, 6vw, 56px);
+    box-shadow: var(--shadow-deep);
+  }
+  .newsletter__title { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.8rem, 4.5vw, 2.8rem); margin: 0.6rem 0 0; color: var(--c-text); }
+  .newsletter__form { display: flex; gap: 12px; margin-top: 1.8rem; flex-wrap: wrap; justify-content: center; }
+  .newsletter__form input {
+    flex: 1 1 280px;
+    background: var(--c-wood-0);
+    border: 1px solid var(--c-line-hi);
+    border-radius: 10px;
+    color: var(--c-text);
+    font-family: var(--f-body);
+    font-size: 1rem;
+    padding: 0.85em 1.1em;
+  }
+  .newsletter__form input::placeholder { color: var(--c-text-dim); }
+  .newsletter__form input:focus { outline: none; border-color: var(--c-brass); }
+
+  /* ============================================================ */
+  /* FOOTER                                                        */
+  /* ============================================================ */
+  .footer {
+    position: relative; z-index: 2;
+    background: var(--c-wood-0);
+    border-top: 1px solid var(--c-line);
+    padding: 46px 0;
+    text-align: center;
+    color: var(--c-text-dim);
+  }
+  .footer__fleuron { color: var(--c-brass); font-size: 1.5rem; }
+  .footer__links { margin-top: 0.9rem; font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; }
+  .footer__links a { color: var(--c-text-dim); transition: color .25s var(--ease); }
+  .footer__links a:hover { color: var(--c-brass-hi); }
+  .footer__copy { margin-top: 1rem; font-size: 0.95rem; }
+
+  /* tiny fixed concept caption */
+  .concept-caption {
+    position: fixed; left: 12px; bottom: 10px; z-index: 80;
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em;
+    color: rgba(203,184,156,0.55);
+    pointer-events: none;
+  }
+
+  /* ============================================================ */
+  /* RESPONSIVE                                                    */
+  /* ============================================================ */
+  @media (max-width: 980px) {
+    .feature__grid { grid-template-columns: 1fr; }
+    .feature__media { max-width: 320px; }
+    .books__grid { grid-template-columns: repeat(2, 1fr); }
+    .voices__grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    body { font-size: 17px; }
+    .nav__toggle { display: block; }
+    .nav__links {
+      position: absolute; top: var(--header-h); left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: linear-gradient(180deg, rgba(27,18,10,0.99), rgba(36,25,16,0.98));
+      border-bottom: 1px solid var(--c-line-hi);
+      padding: 6px 0;
+      transform: translateY(-12px);
+      opacity: 0; pointer-events: none;
+      transition: transform .3s var(--ease), opacity .3s var(--ease);
+    }
+    .nav__links a { width: 100%; padding: 16px 22px; }
+    .nav__links a::after { display: none; }
+    .nav.is-open .nav__links { transform: translateY(0); opacity: 1; pointer-events: auto; }
+    .books__grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  }
+  @media (max-width: 400px) {
+    .books__grid { grid-template-columns: 1fr; }
+  }
+
+  /* ============================================================ */
+  /* REDUCED MOTION                                                */
+  /* ============================================================ */
+  @media (prefers-reduced-motion: reduce) {
+    .gear { animation: none !important; }
+    .lamp-glow { animation: none; opacity: 0.9; }
+    .scroll-hint .chev { animation: none; }
+    .player { transform: translateX(-50%) !important; }
+    .reveal { transition: none !important; opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ELEMENT: Navigation -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top"><span class="fleuron">❦</span> Federwerkstatt</a>
+  <nav class="nav__links" id="nav-links" aria-label="Hauptnavigation">
+    <a href="#top">Start</a>
+    <a href="#buecher">Bücher</a>
+    <a href="#ueber">Über</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+  <button class="nav__toggle" id="nav-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="nav-links">
+    <span></span>
+  </button>
+</header>
+
+<main id="top">
+
+  <!-- ELEMENT: Hero -->
+  <section class="hero" aria-label="Federwerkstatt — Werkstatt-Szene">
+
+    <!-- ELEMENT: Parallax-Werkbank -->
+    <div class="parallax" id="parallax" aria-hidden="true">
+      <div class="lamp-glow"></div>
+
+      <!-- back layer: plank wall -->
+      <div class="player" data-depth="0.06" style="top:-4%;">
+        <svg viewBox="0 0 1320 760" preserveAspectRatio="xMidYMin slice">
+          <defs>
+            <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3d2a18"/>
+              <stop offset="1" stop-color="#241910"/>
+            </linearGradient>
+          </defs>
+          <rect width="1320" height="760" fill="url(#wall)"/>
+          <g stroke="rgba(0,0,0,0.35)" stroke-width="3">
+            <line x1="0" y1="120" x2="1320" y2="120"/>
+            <line x1="0" y1="240" x2="1320" y2="240"/>
+            <line x1="0" y1="360" x2="1320" y2="360"/>
+            <line x1="0" y1="480" x2="1320" y2="480"/>
+            <line x1="0" y1="600" x2="1320" y2="600"/>
+            <line x1="0" y1="720" x2="1320" y2="720"/>
+          </g>
+          <g stroke="rgba(202,164,92,0.05)" stroke-width="1">
+            <line x1="0" y1="121" x2="1320" y2="121"/>
+            <line x1="0" y1="241" x2="1320" y2="241"/>
+            <line x1="0" y1="361" x2="1320" y2="361"/>
+            <line x1="0" y1="481" x2="1320" y2="481"/>
+            <line x1="0" y1="601" x2="1320" y2="601"/>
+          </g>
+          <!-- vertical seams, offset per row (brick) -->
+          <g stroke="rgba(0,0,0,0.28)" stroke-width="2">
+            <line x1="260" y1="0" x2="260" y2="120"/><line x1="640" y1="0" x2="640" y2="120"/><line x1="1010" y1="0" x2="1010" y2="120"/>
+            <line x1="120" y1="120" x2="120" y2="240"/><line x1="500" y1="120" x2="500" y2="240"/><line x1="880" y1="120" x2="880" y2="240"/>
+            <line x1="320" y1="240" x2="320" y2="360"/><line x1="720" y1="240" x2="720" y2="360"/><line x1="1100" y1="240" x2="1100" y2="360"/>
+            <line x1="180" y1="360" x2="180" y2="480"/><line x1="560" y1="360" x2="560" y2="480"/><line x1="940" y1="360" x2="940" y2="480"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- mid layer: shelf with rustic tools (quill, inkpot, saw, books) -->
+      <div class="player" data-depth="0.14" style="top:6%;">
+        <svg viewBox="0 0 1320 460" preserveAspectRatio="xMidYMin meet">
+          <defs>
+            <linearGradient id="shelf" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#9a6a3c"/>
+              <stop offset="1" stop-color="#5a3c20"/>
+            </linearGradient>
+          </defs>
+          <!-- shelf plank -->
+          <rect x="90" y="300" width="1140" height="26" rx="5" fill="url(#shelf)"/>
+          <rect x="90" y="326" width="1140" height="10" rx="4" fill="rgba(0,0,0,0.45)"/>
+          <!-- brackets -->
+          <path d="M140 326 L140 372 L168 326 Z" fill="#5a3c20"/>
+          <path d="M1180 326 L1180 372 L1152 326 Z" fill="#5a3c20"/>
+
+          <!-- stacked books (left) -->
+          <g>
+            <rect x="170" y="252" width="150" height="22" rx="3" fill="#7c5230"/>
+            <rect x="184" y="226" width="150" height="24" rx="3" fill="#9a6a3c"/>
+            <rect x="176" y="198" width="150" height="26" rx="3" fill="#6a3f22"/>
+            <rect x="184" y="204" width="6" height="14" fill="#caa45c" opacity="0.7"/>
+          </g>
+
+          <!-- inkpot + quill (center) -->
+          <g transform="translate(620,210)">
+            <ellipse cx="0" cy="86" rx="46" ry="10" fill="rgba(0,0,0,0.4)"/>
+            <path d="M-40 40 Q-40 88 0 88 Q40 88 40 40 Z" fill="#2a1c0c"/>
+            <rect x="-44" y="30" width="88" height="16" rx="6" fill="#3d2a18"/>
+            <ellipse cx="0" cy="32" rx="30" ry="8" fill="#1b120a"/>
+            <!-- quill -->
+            <path d="M8 28 C 60 -30 92 -78 120 -120 C 96 -70 86 -22 30 36 Z" fill="#efe3cf" opacity="0.92"/>
+            <line x1="20" y1="6" x2="100" y2="-96" stroke="#caa45c" stroke-width="2" opacity="0.6"/>
+          </g>
+
+          <!-- hand saw (right) -->
+          <g transform="translate(900,200)">
+            <rect x="0" y="0" width="44" height="70" rx="18" fill="#6a3f22"/>
+            <rect x="10" y="14" width="24" height="42" rx="12" fill="#241910"/>
+            <path d="M44 60 L300 92 L300 110 L44 78 Z" fill="#b9b1a3"/>
+            <path d="M60 80 l8 6 l8 -5 l8 6 l8 -5 l8 6 l8 -5 l8 6 l8 -5 l8 6 l8 -5 l8 6 l8 -5 l8 6 l8 -5 l8 6 l8 -5 l8 6 l8 -5 l8 6"
+                  fill="none" stroke="#5a3c20" stroke-width="2"/>
+          </g>
+
+          <!-- small jar (far right) -->
+          <g transform="translate(1080,236)">
+            <rect x="0" y="0" width="48" height="62" rx="8" fill="#caa45c" opacity="0.5"/>
+            <rect x="6" y="-10" width="36" height="14" rx="4" fill="#6a3f22"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- hanging lamp (front-ish, modest depth) -->
+      <div class="player" data-depth="0.04" style="top:-6%;">
+        <svg viewBox="0 0 1320 360" preserveAspectRatio="xMidYMin meet">
+          <line x1="660" y1="0" x2="660" y2="120" stroke="#2a1c0c" stroke-width="4"/>
+          <ellipse cx="660" cy="118" rx="8" ry="4" fill="#3d2a18"/>
+          <path d="M600 122 Q660 96 720 122 L700 196 Q660 214 620 196 Z" fill="#5a3c20"/>
+          <path d="M600 122 Q660 100 720 122" fill="none" stroke="#caa45c" stroke-width="2" opacity="0.6"/>
+          <ellipse cx="660" cy="200" rx="44" ry="22" fill="#f4c878" opacity="0.5"/>
+          <circle cx="660" cy="196" r="14" fill="#f4c878"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ELEMENT: Zahnräder -->
+    <div class="gears" id="gears" aria-hidden="true">
+      <div class="gear gear--g1" id="gear-scroll" data-k="0.16">
+        <svg viewBox="0 0 100 100"><use href="#gearShape"/></svg>
+      </div>
+      <div class="gear gear--g2"><svg viewBox="0 0 100 100"><use href="#gearShape"/></svg></div>
+      <div class="gear gear--g3"><svg viewBox="0 0 100 100"><use href="#gearShape"/></svg></div>
+      <div class="gear gear--g4"><svg viewBox="0 0 100 100"><use href="#gearShape"/></svg></div>
+      <div class="gear gear--g5"><svg viewBox="0 0 100 100"><use href="#gearShape"/></svg></div>
+      <div class="gear gear--g6"><svg viewBox="0 0 100 100"><use href="#gearShape"/></svg></div>
+    </div>
+
+    <div class="hero__inner wrap">
+      <div class="hero__content">
+        <span class="kicker hero__kicker">FEDERWERKSTATT · HANDARBEIT SEIT JEHER</span>
+        <h1 class="hero__title">Federwerkstatt</h1>
+        <p class="hero__tagline">Geschichten, die dich nicht mehr loslassen.</p>
+        <div class="hero__cta">
+          <a class="btn btn--brass" href="#buecher">Bücher entdecken</a>
+          <a class="btn btn--ghost" href="#kontakt">Newsletter</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Hinab</span>
+      <span class="chev"></span>
+    </div>
+  </section>
+
+  <!-- ELEMENT: Neuerscheinung -->
+  <section class="section feature" id="ueber" aria-label="Neuerscheinung">
+    <div class="wrap">
+      <div class="feature__grid">
+        <div class="feature__media reveal reveal--left">
+          <div class="cover">
+            <svg viewBox="0 0 250 350" preserveAspectRatio="none" role="img" aria-label="Cover: Aschewald">
+              <defs>
+                <linearGradient id="cAsh" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#3d2a18"/>
+                  <stop offset="1" stop-color="#1b120a"/>
+                </linearGradient>
+              </defs>
+              <rect width="250" height="350" fill="url(#cAsh)"/>
+              <g stroke="#caa45c" stroke-width="1.4" opacity="0.55" fill="none">
+                <path d="M40 350 L42 150 L30 110 M42 200 L66 170 M42 250 L18 220"/>
+                <path d="M120 350 L124 120 L108 80 M124 180 L150 150 M124 240 L98 210"/>
+                <path d="M205 350 L208 170 L196 130 M208 220 L230 195 M208 270 L186 245"/>
+              </g>
+              <rect x="22" y="22" width="206" height="306" fill="none" stroke="#caa45c" stroke-width="1" opacity="0.4"/>
+              <text x="125" y="300" text-anchor="middle" fill="#efe3cf" font-family="Cormorant Garamond, serif" font-size="30" font-weight="700">Aschewald</text>
+            </svg>
+          </div>
+        </div>
+        <div class="feature__body reveal reveal--right">
+          <span class="tag">NEU</span>
+          <h2 class="feature__title">Aschewald</h2>
+          <p class="feature__hook">„Wer eine Woche im Wald bleibt, kehrt als ein anderer zurück.“</p>
+          <p class="feature__blurb">
+            Eine Forstpsychologin folgt der Spur ihrer verschwundenen Schwester in ein
+            abgelegenes Waldgehöft, in dem die Zeit stehengeblieben scheint. Je tiefer sie
+            zwischen die Stämme vordringt, desto weniger traut sie ihren eigenen Erinnerungen.
+            Ein Kammerspiel aus Schweigen, Schuld und dem leisen Knacken im Unterholz.
+          </p>
+          <a class="btn btn--brass" href="#buecher">Mehr erfahren</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELEMENT: Bücher-Raster -->
+  <section class="section books" id="buecher" aria-label="Bücher">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <span class="kicker">DAS WERK</span>
+        <h2 class="section__title">Aus der Werkbank</h2>
+        <p class="section__lead">Vier Geschichten, von Hand gefügt — jede ein leises Türenschlagen im Dunkeln.</p>
+      </div>
+      <div class="books__grid">
+        <article class="book reveal" style="--d:0ms">
+          <div class="cover">
+            <svg viewBox="0 0 250 350" preserveAspectRatio="none" role="img" aria-label="Cover: Die Stille danach">
+              <rect width="250" height="350" fill="#241910"/>
+              <circle cx="125" cy="150" r="70" fill="none" stroke="#caa45c" stroke-width="1.5" opacity="0.45"/>
+              <circle cx="125" cy="150" r="44" fill="none" stroke="#9a6a3c" stroke-width="1.5" opacity="0.6"/>
+              <text x="125" y="300" text-anchor="middle" fill="#efe3cf" font-family="Cormorant Garamond, serif" font-size="22" font-weight="700">Die Stille</text>
+              <text x="125" y="322" text-anchor="middle" fill="#cbb89c" font-family="Cormorant Garamond, serif" font-size="20" font-weight="600">danach</text>
+            </svg>
+          </div>
+          <h3 class="book__title">Die Stille danach</h3>
+          <p class="book__hook">„Manche Türen sollte man geschlossen lassen.“</p>
+        </article>
+
+        <article class="book reveal" style="--d:90ms">
+          <div class="cover">
+            <svg viewBox="0 0 250 350" preserveAspectRatio="none" role="img" aria-label="Cover: Kein Entkommen">
+              <rect width="250" height="350" fill="#2a1c0c"/>
+              <g stroke="#caa45c" stroke-width="2" opacity="0.5">
+                <line x1="60" y1="60" x2="60" y2="240"/><line x1="100" y1="60" x2="100" y2="240"/>
+                <line x1="140" y1="60" x2="140" y2="240"/><line x1="180" y1="60" x2="180" y2="240"/>
+              </g>
+              <text x="125" y="300" text-anchor="middle" fill="#efe3cf" font-family="Cormorant Garamond, serif" font-size="22" font-weight="700">Kein</text>
+              <text x="125" y="322" text-anchor="middle" fill="#cbb89c" font-family="Cormorant Garamond, serif" font-size="20" font-weight="600">Entkommen</text>
+            </svg>
+          </div>
+          <h3 class="book__title">Kein Entkommen</h3>
+          <p class="book__hook">„Er war schon im Haus, bevor sie es merkte.“</p>
+        </article>
+
+        <article class="book reveal" style="--d:180ms">
+          <div class="cover">
+            <svg viewBox="0 0 250 350" preserveAspectRatio="none" role="img" aria-label="Cover: Was du nicht siehst">
+              <rect width="250" height="350" fill="#1b120a"/>
+              <path d="M60 150 Q125 100 190 150 Q125 200 60 150 Z" fill="none" stroke="#caa45c" stroke-width="1.6" opacity="0.55"/>
+              <circle cx="125" cy="150" r="20" fill="#9a6a3c" opacity="0.7"/>
+              <circle cx="125" cy="150" r="9" fill="#1b120a"/>
+              <text x="125" y="300" text-anchor="middle" fill="#efe3cf" font-family="Cormorant Garamond, serif" font-size="21" font-weight="700">Was du</text>
+              <text x="125" y="322" text-anchor="middle" fill="#cbb89c" font-family="Cormorant Garamond, serif" font-size="19" font-weight="600">nicht siehst</text>
+            </svg>
+          </div>
+          <h3 class="book__title">Was du nicht siehst</h3>
+          <p class="book__hook">„Im Dunkeln ist niemand allein.“</p>
+        </article>
+
+        <article class="book reveal" style="--d:270ms">
+          <div class="cover">
+            <svg viewBox="0 0 250 350" preserveAspectRatio="none" role="img" aria-label="Cover: Hinter Glas">
+              <rect width="250" height="350" fill="#241910"/>
+              <rect x="70" y="70" width="110" height="160" fill="none" stroke="#caa45c" stroke-width="1.6" opacity="0.5"/>
+              <line x1="125" y1="70" x2="125" y2="230" stroke="#caa45c" stroke-width="1.2" opacity="0.4"/>
+              <line x1="70" y1="150" x2="180" y2="150" stroke="#caa45c" stroke-width="1.2" opacity="0.4"/>
+              <text x="125" y="300" text-anchor="middle" fill="#efe3cf" font-family="Cormorant Garamond, serif" font-size="24" font-weight="700">Hinter Glas</text>
+            </svg>
+          </div>
+          <h3 class="book__title">Hinter Glas</h3>
+          <p class="book__hook">„Sie beobachtet zurück.“</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELEMENT: Stimmen -->
+  <section class="section voices" aria-label="Stimmen">
+    <div class="wrap">
+      <div class="section__head reveal">
+        <span class="kicker">STIMMEN</span>
+        <h2 class="section__title">Was Leser sagen</h2>
+      </div>
+      <div class="voices__grid">
+        <figure class="voice reveal" style="--d:0ms">
+          <blockquote class="voice__quote">„Atemloser Nervenkitzel – Gänsehaut garantiert.“</blockquote>
+          <figcaption class="voice__src">Lesestimmen</figcaption>
+        </figure>
+        <figure class="voice reveal" style="--d:120ms">
+          <blockquote class="voice__quote">„Man liest mit angehaltenem Atem bis zur letzten Seite.“</blockquote>
+          <figcaption class="voice__src">Krimi-Journal</figcaption>
+        </figure>
+        <figure class="voice reveal" style="--d:240ms">
+          <blockquote class="voice__quote">„Psychologisch fein, abgründig, unheimlich nah.“</blockquote>
+          <figcaption class="voice__src">Nachtlese</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ELEMENT: Newsletter -->
+  <section class="section newsletter" id="kontakt" aria-label="Newsletter">
+    <div class="wrap">
+      <div class="newsletter__card reveal reveal--scale">
+        <span class="kicker">IN KONTAKT BLEIBEN</span>
+        <h2 class="newsletter__title">Bleib in Kontakt — keine Neuerscheinung verpassen.</h2>
+        <form class="newsletter__form" id="newsletter-form" novalidate>
+          <label for="nl-email" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">E-Mail-Adresse</label>
+          <input id="nl-email" type="email" placeholder="deine@email.de" autocomplete="email">
+          <button class="btn btn--brass" type="submit">Eintragen</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ELEMENT: Footer -->
+<footer class="footer" aria-label="Fußzeile">
+  <div class="wrap">
+    <div class="footer__fleuron">❦</div>
+    <div class="footer__links">
+      <a href="#">Impressum</a> · <a href="#">Datenschutz</a>
+    </div>
+    <p class="footer__copy">© 2026 Federwerkstatt · Alle Rechte vorbehalten.</p>
+  </div>
+</footer>
+
+<div class="concept-caption">Konzept E · ›Werkbank‹</div>
+
+<!-- shared SVG gear definition -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="gearShape">
+      <!-- 12-tooth gear built from a star-ish path + center bore -->
+      <path fill="currentColor" d="
+        M50 2 L56 14 L68 11 L69 23 L81 25 L77 37 L88 43 L80 52 L88 61 L77 67
+        L81 79 L69 81 L68 93 L56 90 L50 102 L44 90 L32 93 L31 81 L19 79 L23 67
+        L12 61 L20 52 L12 43 L23 37 L19 25 L31 23 L32 11 L44 14 Z"/>
+      <circle cx="50" cy="52" r="22" fill="#241910"/>
+      <circle cx="50" cy="52" r="22" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="50" cy="52" r="9" fill="#241910" stroke="currentColor" stroke-width="3"/>
+    </g>
+  </defs>
+</svg>
+
+<script>
+(function () {
+  "use strict";
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- mobile nav (hamburger) ---------- */
+  var nav = document.getElementById("nav");
+  var navToggle = document.getElementById("nav-toggle");
+  var navLinks = document.getElementById("nav-links");
+
+  if (navToggle) {
+    navToggle.addEventListener("click", function () {
+      var open = nav.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      navToggle.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+    });
+    navLinks.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") {
+        nav.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+        navToggle.setAttribute("aria-label", "Menü öffnen");
+      }
+    });
+  }
+
+  /* ---------- newsletter (non-functional) ---------- */
+  var form = document.getElementById("newsletter-form");
+  if (form) form.addEventListener("submit", function (e) { e.preventDefault(); });
+
+  /* ---------- scroll-reveal ---------- */
+  var reveals = [].slice.call(document.querySelectorAll(".reveal"));
+  if (reduce || !("IntersectionObserver" in window)) {
+    reveals.forEach(function (el) { el.classList.add("is-in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
+    reveals.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- ONE shared rAF scroll loop ---------- */
+  /* drives: header stuck-state · parallax layers · scroll-linked gear */
+  var layers = [].slice.call(document.querySelectorAll(".player[data-depth]"));
+  var scrollGear = document.getElementById("gear-scroll");
+  var gearK = scrollGear ? parseFloat(scrollGear.getAttribute("data-k")) || 0.16 : 0.16;
+  var heroH = window.innerHeight;
+  var ticking = false;
+
+  function onResize() { heroH = window.innerHeight; }
+  window.addEventListener("resize", onResize, { passive: true });
+
+  function applyScroll() {
+    var y = window.scrollY || window.pageYOffset;
+
+    // header deepen
+    if (nav) {
+      if (y > 24) nav.classList.add("is-stuck");
+      else nav.classList.remove("is-stuck");
+    }
+
+    // only animate parallax/gear while the hero is roughly in view
+    if (!reduce && y < heroH * 1.4) {
+      for (var i = 0; i < layers.length; i++) {
+        var d = parseFloat(layers[i].getAttribute("data-depth")) || 0;
+        layers[i].style.transform = "translateX(-50%) translate3d(0," + (y * d) + "px,0)";
+      }
+      if (scrollGear) {
+        scrollGear.style.transform = "rotate(" + (y * gearK) + "deg)";
+      }
+    }
+    ticking = false;
+  }
+
+  if (!reduce) {
+    window.addEventListener("scroll", function () {
+      if (!ticking) { window.requestAnimationFrame(applyScroll); ticking = true; }
+    }, { passive: true });
+    applyScroll();
+  }
+})();
+</script>
+</body>
+</html>
