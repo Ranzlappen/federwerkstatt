@@ -1,12 +1,13 @@
 # Federwerkstatt — Entwurfsgalerie (design showcase)
 
-Four self-contained landing-page concepts to choose from — three atmospheric
-**psychological-thriller** directions plus one bright **spring / blossom** counterpoint.
-They are **showcase mockups**, not wired into the live site — open them directly in a
-browser. Branding is **Federwerkstatt**; the author's real name appears nowhere
-(placeholder book titles + invented review blurbs are used).
+Five self-contained landing-page concepts to choose from — three atmospheric
+**psychological-thriller** directions, one bright **spring / blossom** counterpoint, and
+one warm **rustic workshop** with turning gears + scroll animations. They are **showcase
+mockups**, not wired into the live site — open them directly in a browser. Branding is
+**Federwerkstatt**; the author's real name appears nowhere (placeholder book titles +
+invented review blurbs are used).
 
-Open **`index.html`** for the gallery (links all four + the element legend).
+Open **`index.html`** for the gallery (links all five + the element legend).
 
 ## Concepts
 
@@ -16,6 +17,7 @@ Open **`index.html`** for the gallery (links all four + the element legend).
 | `concept-b-naeher.html` | **Näher** | Interactive, kinetic, crimson | Cursor **spotlight** reveal + heartbeat **Puls** line |
 | `concept-c-studierzimmer.html` | **Studierzimmer** | Premium dark-editorial noir | Asymmetric **editorial grid** + brass + **film-grain** |
 | `concept-d-bluete.html` | **Blüte** | Bright spring / blossom | Falling **petals** (Blütenregen) + blooming palette |
+| `concept-e-werkbank.html` | **Werkbank** | Warm rustic wood/leather workshop | Turning brass **cogs** + **parallax backdrop** + scroll-reveal |
 
 ## Mix-and-match
 
